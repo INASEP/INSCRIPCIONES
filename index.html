@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>INASEP – Cupos Disponibles</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f2f0;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:1.5rem 1rem 3rem}
+.page{width:100%;max-width:420px}
+
+/* Skeleton shimmer */
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.skel{background:linear-gradient(90deg,#e4e8e4 25%,#f0f3f0 50%,#e4e8e4 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:6px;color:transparent!important;display:inline-block;min-width:60px}
+
+/* Cards */
+.hero{background:#fff;border-radius:16px;padding:1.75rem 1.5rem 1.25rem;text-align:center;margin-bottom:.75rem;border:1px solid #e0e4e0;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.logo{width:88px;height:88px;object-fit:contain;margin:0 auto .75rem;display:block}
+.org-name{font-size:11px;color:#6b7a6b;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px;font-weight:500}
+.course-title{font-size:19px;font-weight:700;color:#1a2e1a;margin-bottom:.25rem;line-height:1.25}
+.course-sub{font-size:13px;color:#6b7a6b}
+
+/* Cupos card */
+.cupos-card{border-radius:16px;padding:1.5rem;text-align:center;margin:.75rem 0;border:1.5px solid #e0e4e0;background:#f4f6f4;transition:all .35s}
+.cupos-card.loaded{border-color:transparent}
+.cupos-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.5rem;color:#6b7a6b}
+.cupos-num{font-size:80px;font-weight:800;line-height:1;letter-spacing:-2px;color:#b0b8b0}
+.cupos-sub{font-size:13px;margin-top:.5rem;font-weight:500;color:#8a9a8a}
+.cupos-high .cupos-label,.cupos-high .cupos-num,.cupos-high .cupos-sub{color:inherit}
+.cupos-high{background:#e8f5e8;border-color:#7db87d!important}.cupos-high .cupos-label{color:#2d6a2d}.cupos-high .cupos-num{color:#2d6a2d}.cupos-high .cupos-sub{color:#4a8a4a}
+.cupos-mid{background:#fff8e8;border-color:#e8b84b!important}.cupos-mid .cupos-label{color:#7a5a00}.cupos-mid .cupos-num{color:#7a5a00}.cupos-mid .cupos-sub{color:#9a7200}
+.cupos-low{background:#fdecea;border-color:#e57373!important}.cupos-low .cupos-label{color:#8b1a1a}.cupos-low .cupos-num{color:#c62828}.cupos-low .cupos-sub{color:#b71c1c}
+
+/* Info card */
+.info-card{background:#fff;border:1px solid #e0e4e0;border-radius:14px;padding:.875rem 1.25rem;margin-bottom:.75rem;box-shadow:0 1px 6px rgba(0,0,0,.04)}
+.info-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #f0f2f0;font-size:14px}
+.info-row:last-child{border-bottom:none}
+.info-label{color:#7a8a7a;font-size:13px}
+.info-val{font-weight:600;color:#1a2e1a;text-align:right;max-width:62%;font-size:13px}
+
+.section-label{font-size:11px;font-weight:700;color:#5a6e5a;text-transform:uppercase;letter-spacing:.07em;margin:.75rem 0 .4rem .25rem}
+.contact-btn{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #e0e4e0;border-radius:12px;padding:.75rem 1rem;margin-bottom:.5rem;cursor:pointer;width:100%;font-size:14px;color:#1a2e1a;text-decoration:none;transition:background .15s;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.contact-btn:hover{background:#f5f7f5}
+.contact-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.ci-wa{background:#d4edda}.ci-web{background:#d0e8f5}.ci-map{background:#fce8d0}
+.contact-name{font-weight:600;font-size:14px;line-height:1.2}
+.contact-detail{font-size:12px;color:#7a8a7a;margin-top:1px}
+.updated{font-size:11px;color:#9aaa9a;text-align:center;margin-top:.75rem}
+.live-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#7db87d;margin-right:4px;vertical-align:middle;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.admin-toggle{font-size:12px;color:#9aaa9a;text-align:center;margin-top:.35rem;cursor:pointer}
+.admin-toggle:hover{color:#4a6a4a}
+.admin-panel{background:#fff;border:1px solid #c8d4c8;border-radius:14px;padding:1.25rem;margin-top:.75rem;display:none}
+.admin-title{font-size:14px;font-weight:700;margin-bottom:1rem;color:#1a2e1a}
+.field-group{margin-bottom:.65rem}
+.field-label{font-size:11px;color:#7a8a7a;margin-bottom:3px;display:block;font-weight:500}
+input[type=text],input[type=number],input[type=password],input[type=email]{width:100%;border:1px solid #d0d8d0;border-radius:8px;padding:7px 10px;font-size:13px;background:#fafafa;color:#1a2e1a;outline:none}
+input:focus{border-color:#4a7a4a}
+.save-btn{background:#3a6a3a;border:none;border-radius:10px;padding:10px 16px;font-size:14px;cursor:pointer;width:100%;font-weight:600;color:#fff;margin-top:.5rem}
+.save-btn:hover{background:#2d5a2d}
+.lock-form{text-align:center;padding:.25rem 0}
+.divider{height:1px;background:#f0f2f0;margin:.5rem 0}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero">
+    <img class="logo" id="logo-img" src="logo.png" alt="Logo INASEP"/>
+    <div class="org-name">Instituto INASEP SpA</div>
+    <div class="course-title" id="course-title-disp">Curso de Formación para Guardias de Seguridad Privada</div>
+    <div class="course-sub" id="course-sub-disp">Habilitación OS10 · Modalidad presencial</div>
+  </div>
+
+  <!-- CUPOS CARD -->
+  <div class="cupos-card" id="cupos-card">
+    <div class="cupos-label">Cupos disponibles</div>
+    <div class="cupos-num" id="cupos-num">—</div>
+    <div class="cupos-sub" id="cupos-sub">Cargando...</div>
+  </div>
+
+  <!-- INFO CARD -->
+  <div class="info-card">
+    <div class="info-row"><span class="info-label">Fecha de inicio</span><span class="info-val skel" id="fecha-inicio">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+    <div class="info-row"><span class="info-label">Inscripciones hasta</span><span class="info-val skel" id="inscripciones-hasta">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+    <div class="info-row"><span class="info-label">Horario</span><span class="info-val skel" id="horario">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+    <div class="info-row"><span class="info-label">Duración</span><span class="info-val skel" id="duracion">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+    <div class="info-row"><span class="info-label">Lugar</span><span class="info-val skel" id="lugar">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+    <div class="info-row"><span class="info-label">Precio</span><span class="info-val skel" id="precio">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+  </div>
+
+  <div class="section-label">Inscríbete ahora</div>
+
+  <a class="contact-btn" href="#" onclick="openWa();return false">
+    <div class="contact-icon ci-wa">💬</div>
+    <div><div class="contact-name">WhatsApp INASEP</div><div class="contact-detail">+56 9 4406 1866</div></div>
+  </a>
+  <a class="contact-btn" href="#" onclick="openWeb();return false">
+    <div class="contact-icon ci-web">🌐</div>
+    <div><div class="contact-name">Sitio web</div><div class="contact-detail">www.inasep.cl</div></div>
+  </a>
+  <a class="contact-btn" href="#" onclick="openMap();return false">
+    <div class="contact-icon ci-map">📍</div>
+    <div><div class="contact-name">Nuestra dirección</div><div class="contact-detail">Aníbal Pinto 875, Quilpué</div></div>
+  </a>
+
+  <!-- CONTACTO DIRECTO -->
+  <div style="margin-top:1.25rem;background:#fff;border:1px solid #e0e4e0;border-radius:14px;padding:.875rem 1.25rem;box-shadow:0 1px 6px rgba(0,0,0,.04)">
+    <div style="font-size:11px;font-weight:700;color:#5a6e5a;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.6rem">Contacto directo</div>
+    <a href="tel:+56944061866" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#1a2e1a;padding:6px 0;border-bottom:1px solid #f0f2f0">
+      <div style="width:32px;height:32px;border-radius:50%;background:#d4edda;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">📱</div>
+      <div><div style="font-weight:600;font-size:14px">Celular</div><div style="font-size:12px;color:#7a8a7a">+56 9 4406 1866</div></div>
+    </a>
+    <a href="tel:+56322151748" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#1a2e1a;padding:6px 0">
+      <div style="width:32px;height:32px;border-radius:50%;background:#d0e8f5;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">☎</div>
+      <div><div style="font-weight:600;font-size:14px">Teléfono fijo</div><div style="font-size:12px;color:#7a8a7a">32 215 1748</div></div>
+    </a>
+  </div>
+
+  <a href="https://www.inasep.cl/2024/07/21/cursos-para-guardias/" target="_blank" rel="noopener"
+     style="display:block;margin-top:.75rem;background:#3a6a3a;border:none;border-radius:12px;padding:14px 16px;font-size:15px;font-weight:700;color:#fff;text-align:center;text-decoration:none;box-shadow:0 2px 8px rgba(58,106,58,.25)">
+    Más Información — Click Aquí
+  </a>
+
+  <div class="updated" id="updated-ts"></div>
+  <div class="admin-toggle" onclick="showPanel()">⚙ Administrador</div>
+
+  <!-- PANEL ADMIN -->
+  <div class="admin-panel" id="admin-panel">
+    <div id="lock-section" class="lock-form">
+      <div class="field-group"><div class="field-label">Email</div><input type="email" id="admin-email" placeholder="usuario@correo.cl" autocomplete="username"/></div>
+      <div class="field-group"><div class="field-label">Contraseña</div><input type="password" id="admin-pwd" placeholder="••••••" autocomplete="current-password"/></div>
+      <div id="login-error" style="font-size:12px;color:#c62828;margin-bottom:.5rem;display:none"></div>
+      <button class="save-btn" onclick="doLogin()">Entrar</button>
+    </div>
+    <div id="edit-section" style="display:none">
+      <div class="admin-title">✏ Editar información</div>
+      <div class="field-group"><div class="field-label">Cupos disponibles</div><input type="number" id="e-cupos" min="0" max="999"/></div>
+      <div class="field-group"><div class="field-label">Total de cupos</div><input type="number" id="e-total" min="1" max="999"/></div>
+      <div class="divider"></div>
+      <div class="field-group"><div class="field-label">Título del curso</div><input type="text" id="e-title"/></div>
+      <div class="field-group"><div class="field-label">Subtítulo</div><input type="text" id="e-sub"/></div>
+      <div class="field-group"><div class="field-label">Fecha de inicio</div><input type="text" id="e-fecha"/></div>
+      <div class="field-group"><div class="field-label">Inscripciones hasta</div><input type="text" id="e-inscripciones"/></div>
+      <div class="field-group"><div class="field-label">Horario</div><input type="text" id="e-horario"/></div>
+      <div class="field-group"><div class="field-label">Duración</div><input type="text" id="e-duracion"/></div>
+      <div class="field-group"><div class="field-label">Precio</div><input type="text" id="e-precio"/></div>
+      <div class="divider"></div>
+      <div class="field-group"><div class="field-label">Dirección</div><input type="text" id="e-dir"/></div>
+      <button class="save-btn" onclick="saveData()">Guardar y publicar ✓</button>
+      <button class="save-btn" onclick="doLogout()" style="background:#888;margin-top:.4rem">Cerrar sesión</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Firebase al FINAL del body (no bloquea el renderizado) -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+<script>
+const WA  = '56944061866';
+const WEB = 'https://www.inasep.cl';
+
+const defaults = {
+  cupos: 12, total: 20,
+  title: 'Curso de Formación para Guardias de Seguridad Privada',
+  sub: 'Habilitación OS10 · Modalidad presencial',
+  fecha: 'Sábado 3 de mayo 2025',
+  inscripciones: '',
+  horario: '09:00 – 17:00 hrs',
+  duracion: '2 sábados',
+  lugar: 'Aníbal Pinto 875, Quilpué',
+  precio: '$120.000 CLP',
+  ts: null
+};
+
+// ── Inicializar Firebase ──
+const firebaseConfig = {
+  apiKey: "AIzaSyDKolgHQDoTrZ5zDA_qkq4gGsdbVYam8V4",
+  authDomain: "cursos-os10.firebaseapp.com",
+  databaseURL: "https://cursos-os10-default-rtdb.firebaseio.com",
+  projectId: "cursos-os10",
+  storageBucket: "cursos-os10.firebasestorage.app",
+  messagingSenderId: "119038299630",
+  appId: "1:119038299630:web:a09a698d26fa7b445dd2ff"
+};
+firebase.initializeApp(firebaseConfig);
+const db   = firebase.database();
+const auth = firebase.auth();
+
+// ── Quitar skeleton de las filas ──
+function removeSkel() {
+  document.querySelectorAll('.skel').forEach(function(el){ el.classList.remove('skel'); });
+}
+
+// ── Render ──
+function render(d) {
+  var cupos = d.cupos != null ? d.cupos : defaults.cupos;
+  var total = d.total || defaults.total;
+  var pct   = cupos / total;
+
+  document.getElementById('course-title-disp').textContent = d.title || defaults.title;
+  document.getElementById('course-sub-disp').textContent   = d.sub   || defaults.sub;
+  document.getElementById('cupos-num').textContent         = cupos;
+  document.getElementById('cupos-sub').textContent         = 'De ' + total + ' cupos totales';
+
+  var card = document.getElementById('cupos-card');
+  card.className = 'cupos-card loaded ' + (pct > 0.4 ? 'cupos-high' : pct > 0.15 ? 'cupos-mid' : 'cupos-low');
+
+  document.getElementById('fecha-inicio').textContent       = d.fecha        || defaults.fecha;
+  document.getElementById('inscripciones-hasta').textContent= d.inscripciones || '—';
+  document.getElementById('horario').textContent            = d.horario       || defaults.horario;
+  document.getElementById('duracion').textContent           = d.duracion      || defaults.duracion;
+  document.getElementById('lugar').textContent              = d.lugar         || defaults.lugar;
+  document.getElementById('precio').textContent             = d.precio        || defaults.precio;
+
+  var ts = document.getElementById('updated-ts');
+  if (d.ts) {
+    ts.innerHTML = '<span class="live-dot"></span>Actualizado: ' + d.ts;
+  } else {
+    ts.innerHTML = '<span class="live-dot"></span>En vivo';
+  }
+
+  removeSkel();
+  window._fbData = d;
+}
+
+// ── Escuchar cambios en TIEMPO REAL (siempre desde el servidor) ──
+db.ref('curso_actual').on('value', function(snapshot) {
+  var data = snapshot.val();
+  var d    = data ? Object.assign({}, defaults, data) : Object.assign({}, defaults);
+  render(d);
+}, function(error) {
+  // Si falla, mostrar valores por defecto y quitar skeleton
+  render(Object.assign({}, defaults));
+  console.warn('Firebase error:', error);
+});
+
+// ── Auth ──
+function doLogin() {
+  var email = document.getElementById('admin-email').value.trim();
+  var pwd   = document.getElementById('admin-pwd').value;
+  var errEl = document.getElementById('login-error');
+  errEl.style.display = 'none';
+  auth.signInWithEmailAndPassword(email, pwd)
+    .catch(function() {
+      errEl.textContent    = 'Credenciales incorrectas. Verifica tu email y contraseña.';
+      errEl.style.display  = 'block';
+    });
+}
+
+function doLogout() { auth.signOut(); }
+
+auth.onAuthStateChanged(function(user) {
+  var panel = document.getElementById('admin-panel');
+  if (user) {
+    document.getElementById('lock-section').style.display = 'none';
+    document.getElementById('edit-section').style.display = 'block';
+    fillForm(window._fbData || Object.assign({}, defaults));
+  } else {
+    document.getElementById('lock-section').style.display = 'block';
+    document.getElementById('edit-section').style.display = 'none';
+    document.getElementById('admin-pwd').value            = '';
+    document.getElementById('admin-email').value          = '';
+    document.getElementById('login-error').style.display  = 'none';
+    if (panel.style.display === 'block') panel.style.display = 'none';
+  }
+});
+
+function showPanel() {
+  var p = document.getElementById('admin-panel');
+  p.style.display = p.style.display === 'none' ? 'block' : 'none';
+}
+
+function fillForm(d) {
+  document.getElementById('e-cupos').value        = d.cupos != null ? d.cupos : defaults.cupos;
+  document.getElementById('e-total').value        = d.total         || defaults.total;
+  document.getElementById('e-title').value        = d.title         || defaults.title;
+  document.getElementById('e-sub').value          = d.sub           || defaults.sub;
+  document.getElementById('e-fecha').value        = d.fecha         || defaults.fecha;
+  document.getElementById('e-inscripciones').value= d.inscripciones || '';
+  document.getElementById('e-horario').value      = d.horario       || defaults.horario;
+  document.getElementById('e-duracion').value     = d.duracion      || defaults.duracion;
+  document.getElementById('e-dir').value          = d.lugar         || defaults.lugar;
+  document.getElementById('e-precio').value       = d.precio        || defaults.precio;
+}
+
+function saveData() {
+  var ts = new Date().toLocaleString('es-CL', {
+    day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit'
+  });
+  var updates = {
+    cupos        : parseInt(document.getElementById('e-cupos').value)  || 0,
+    total        : parseInt(document.getElementById('e-total').value)  || 20,
+    title        : document.getElementById('e-title').value,
+    sub          : document.getElementById('e-sub').value,
+    fecha        : document.getElementById('e-fecha').value,
+    inscripciones: document.getElementById('e-inscripciones').value,
+    horario      : document.getElementById('e-horario').value,
+    duracion     : document.getElementById('e-duracion').value,
+    lugar        : document.getElementById('e-dir').value,
+    precio       : document.getElementById('e-precio').value,
+    ts           : ts
+  };
+  db.ref('curso_actual').update(updates)
+    .then(function(){ alert('✓ Guardado y actualizado en tiempo real'); })
+    .catch(function(){ alert('Error al guardar. Verifica las reglas de Firebase.'); });
+}
+
+function openWa()  { window.open('https://wa.me/'+WA+'?text=Hola%20INASEP%2C%20me%20interesa%20inscribirme%20en%20el%20curso%20OS10'); }
+function openWeb() { window.open(WEB); }
+function openMap() { window.open('https://maps.google.com/?q=Aníbal+Pinto+875+Quilpué+Chile'); }
+</script>
+</body>
+</html>
