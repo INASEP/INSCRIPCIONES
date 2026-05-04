@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>INASEP – Cupos Disponibles</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f2f0;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:1.5rem 1rem 3rem}
+.page{width:100%;max-width:420px}
+
+/* Skeleton shimmer */
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.skel{background:linear-gradient(90deg,#e4e8e4 25%,#f0f3f0 50%,#e4e8e4 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:6px;color:transparent!important;display:inline-block;min-width:60px}
+
+/* Cards */
+.hero{background:#fff;border-radius:16px;padding:1.75rem 1.5rem 1.25rem;text-align:center;margin-bottom:.75rem;border:1px solid #e0e4e0;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.logo{width:88px;height:88px;object-fit:contain;margin:0 auto .75rem;display:block}
+.org-name{font-size:11px;color:#6b7a6b;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px;font-weight:500}
+.course-title{font-size:19px;font-weight:700;color:#1a2e1a;margin-bottom:.25rem;line-height:1.25}
+.course-sub{font-size:13px;color:#6b7a6b}
+
+/* Cupos card */
+.cupos-card{border-radius:16px;padding:1.5rem;text-align:center;margin:.75rem 0;border:1.5px solid #e0e4e0;background:#f4f6f4;transition:all .35s}
+.cupos-card.loaded{border-color:transparent}
+.cupos-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.5rem;color:#6b7a6b}
+.cupos-num{font-size:80px;font-weight:800;line-height:1;letter-spacing:-2px;color:#b0b8b0}
+.cupos-sub{font-size:13px;margin-top:.5rem;font-weight:500;color:#8a9a8a}
+.cupos-high .cupos-label,.cupos-high .cupos-num,.cupos-high .cupos-sub{color:inherit}
+.cupos-high{background:#e8f5e8;border-color:#7db87d!important}.cupos-high .cupos-label{color:#2d6a2d}.cupos-high .cupos-num{color:#2d6a2d}.cupos-high .cupos-sub{color:#4a8a4a}
+.cupos-mid{background:#fff8e8;border-color:#e8b84b!important}.cupos-mid .cupos-label{color:#7a5a00}.cupos-mid .cupos-num{color:#7a5a00}.cupos-mid .cupos-sub{color:#9a7200}
+.cupos-low{background:#fdecea;border-color:#e57373!important}.cupos-low .cupos-label{color:#8b1a1a}.cupos-low .cupos-num{color:#c62828}.cupos-low .cupos-sub{color:#b71c1c}
+
+/* Info card */
+.info-card{background:#fff;border:1px solid #e0e4e0;border-radius:14px;padding:.875rem 1.25rem;margin-bottom:.75rem;box-shadow:0 1px 6px rgba(0,0,0,.04)}
+.info-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #f0f2f0;font-size:14px}
+.info-row:last-child{border-bottom:none}
+.info-label{color:#7a8a7a;font-size:13px}
+.info-val{font-weight:600;color:#1a2e1a;text-align:right;max-width:62%;font-size:13px}
+
+.section-label{font-size:11px;font-weight:700;color:#5a6e5a;text-transform:uppercase;letter-spacing:.07em;margin:.75rem 0 .4rem .25rem}
+.contact-btn{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #e0e4e0;border-radius:12px;padding:.75rem 1rem;margin-bottom:.5rem;cursor:pointer;width:100%;font-size:14px;color:#1a2e1a;text-decoration:none;transition:background .15s;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.contact-btn:hover{background:#f5f7f5}
+.contact-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.ci-wa{background:#d4edda}.ci-web{background:#d0e8f5}.ci-map{background:#fce8d0}
+.contact-name{font-weight:600;font-size:14px;line-height:1.2}
+.contact-detail{font-size:12px;color:#7a8a7a;margin-top:1px}
+.updated{font-size:11px;color:#9aaa9a;text-align:center;margin-top:.75rem}
+.live-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#7db87d;margin-right:4px;vertical-align:middle;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.admin-toggle{font-size:12px;color:#9aaa9a;text-align:center;margin-top:.35rem;cursor:pointer}
+.admin-toggle:hover{color:#4a6a4a}
+.admin-panel{background:#fff;border:1px solid #c8d4c8;border-radius:14px;padding:1.25rem;margin-top:.75rem;display:none}
+.admin-title{font-size:14px;font-weight:700;margin-bottom:1rem;color:#1a2e1a}
+.field-group{margin-bottom:.65rem}
+.field-label{font-size:11px;color:#7a8a7a;margin-bottom:3px;display:block;font-weight:500}
+input[type=text],input[type=number],input[type=password],input[type=email]{width:100%;border:1px solid #d0d8d0;border-radius:8px;padding:7px 10px;font-size:13px;background:#fafafa;color:#1a2e1a;outline:none}
+input:focus{border-color:#4a7a4a}
+.save-btn{background:#3a6a3a;border:none;border-radius:10px;padding:10px 16px;font-size:14px;cursor:pointer;width:100%;font-weight:600;color:#fff;margin-top:.5rem}
+.save-btn:hover{background:#2d5a2d}
+.lock-form{text-align:center;padding:.25rem 0}
+.divider{height:1px;background:#f0f2f0;margin:.5rem 0}
+
+/* Fila destacada: Fecha de inicio */
+.row-fecha{background:#f0f7f0;border-radius:10px;padding:9px 10px!important;margin:2px 0;border-bottom:none!important}
+.row-fecha .info-label{color:#2d6a2d;font-weight:700}
+.row-fecha .info-val{color:#2d6a2d;font-weight:800;text-decoration:underline;text-decoration-color:#7db87d;text-underline-offset:3px}
+
+/* Fila urgente: Inscripciones hasta — estados dinámicos */
+.row-inscripciones{border-radius:10px;padding:9px 10px!important;margin:2px 0;border-bottom:none!important;position:relative;transition:background .6s,border .6s}
+.row-inscripciones::before{content:'';position:absolute;inset:0;border-radius:10px;pointer-events:none;border:1.5px solid currentColor;opacity:.4}
+.row-inscripciones .info-label{font-weight:700}
+.row-inscripciones .info-val{font-weight:800}
+
+/* Estado OK: >10 días — verde */
+.ri-ok{background:linear-gradient(135deg,#e8f5e8,#d4ecd4)}
+.ri-ok .info-label,.ri-ok .info-val{color:#2d6a2d}
+.ri-ok::before{border-color:#7db87d!important;opacity:.6}
+.urgente-badge.ri-ok-b{background:#7db87d;color:#fff}
+
+/* Estado WARN: 4-10 días — naranja */
+.ri-warn{background:linear-gradient(135deg,#fff3e0,#ffe8c0)}
+.ri-warn .info-label,.ri-warn .info-val{color:#7a4a00}
+.ri-warn::before{border-color:#e8943a!important;opacity:.7}
+.urgente-badge.ri-warn-b{background:#e8943a;color:#fff;animation:badgeWarn 1.2s infinite}
+@keyframes badgeWarn{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.8;transform:scale(1.07)}}
+
+/* Estado CRIT: ≤3 días — rojo urgente */
+.ri-crit{background:linear-gradient(135deg,#fff0ee,#ffdbd6);animation:critBg 1.5s infinite}
+@keyframes critBg{0%,100%{background:linear-gradient(135deg,#fff0ee,#ffdbd6)}50%{background:linear-gradient(135deg,#ffe4e0,#ffccc6)}}
+.ri-crit .info-label,.ri-crit .info-val{color:#8b1a1a}
+.ri-crit::before{border-color:#e53935!important;opacity:.8;animation:critBorder 1.5s infinite}
+@keyframes critBorder{0%,100%{opacity:.8}50%{opacity:1}}
+.urgente-badge.ri-crit-b{background:#e53935;color:#fff;animation:badgeCrit .8s infinite}
+@keyframes badgeCrit{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.75;transform:scale(1.1)}}
+
+/* Estado VENCIDO — gris */
+.ri-done{background:#f4f4f4}
+.ri-done .info-label,.ri-done .info-val{color:#888}
+.ri-done::before{border-color:#ccc!important}
+.urgente-badge.ri-done-b{background:#aaa;color:#fff;animation:none}
+
+/* Badge base */
+.urgente-badge{display:inline-flex;align-items:center;gap:3px;border-radius:20px;padding:2px 7px;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;vertical-align:middle;margin-left:4px}
+
+/* Contador de visitas */
+.visit-counter{display:flex;align-items:center;justify-content:center;gap:8px;background:#fff;border:1px solid #e0e4e0;border-radius:12px;padding:.6rem 1rem;margin-bottom:.75rem;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.visit-text{font-size:12px;color:#7a8a7a}
+.visit-num{font-size:15px;font-weight:800;color:#2d6a2d;min-width:40px;text-align:right}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero">
+    <img class="logo" id="logo-img" src="lgo.png" alt="Logo INASEP"/>
+    <div class="org-name">Instituto INASEP SpA</div>
+    <div class="course-title" id="course-title-disp">Curso de Formación para Guardias de Seguridad Privada</div>
+    <div class="course-sub" id="course-sub-disp">Habilitación OS10 · Modalidad presencial</div>
+  </div>
+
+  <!-- CUPOS CARD -->
+  <div class="cupos-card" id="cupos-card">
+    <div class="cupos-label">Cupos disponibles</div>
+    <div class="cupos-num" id="cupos-num">—</div>
+    <div class="cupos-sub" id="cupos-sub">Cargando...</div>
+  </div>
+
+
+  <!-- CONTADOR DE VISITAS -->
+  <div class="visit-counter">
+    <span style="font-size:16px">👁</span>
+    <span class="visit-text">Personas que han visto este curso</span>
+    <span class="visit-num" id="visit-num">—</span>
+  </div>
+
+  <!-- INFO CARD -->
+  <div class="info-card">
+    <div class="info-row row-fecha"><span class="info-label">📅 Fecha de inicio</span><span class="info-val skel" id="fecha-inicio">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+    <div class="info-row row-inscripciones" id="row-inscripciones"><span class="info-label">⏰ Inscripciones hasta <span class="urgente-badge" id="urgente-badge">⏳ ¡Últimos días!</span></span><span class="info-val skel" id="inscripciones-hasta" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+    <div class="info-row"><span class="info-label">Horario</span><span class="info-val skel" id="horario">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+    <div class="info-row"><span class="info-label">Duración</span><span class="info-val skel" id="duracion">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+    <div class="info-row"><span class="info-label">Lugar</span><span class="info-val skel" id="lugar">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+    <div class="info-row"><span class="info-label">Precio</span><span class="info-val skel" id="precio">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+  </div>
+
+  <div class="section-label">Inscríbete ahora</div>
+
+  <a class="contact-btn" href="#" onclick="openWa();return false">
+    <div class="contact-icon ci-wa">💬</div>
+    <div><div class="contact-name">WhatsApp INASEP</div><div class="contact-detail">+56 9 4406 1866</div></div>
+  </a>
+  <a class="contact-btn" href="#" onclick="openWeb();return false">
+    <div class="contact-icon ci-web">🌐</div>
+    <div><div class="contact-name">Sitio web</div><div class="contact-detail">www.inasep.cl</div></div>
+  </a>
+  <a class="contact-btn" href="#" onclick="openMap();return false">
+    <div class="contact-icon ci-map">📍</div>
+    <div><div class="contact-name">Nuestra dirección</div><div class="contact-detail">Aníbal Pinto 875, Quilpué</div></div>
+  </a>
+
+  <!-- CONTACTO DIRECTO -->
+  <div style="margin-top:1.25rem;background:#fff;border:1px solid #e0e4e0;border-radius:14px;padding:.875rem 1.25rem;box-shadow:0 1px 6px rgba(0,0,0,.04)">
+    <div style="font-size:11px;font-weight:700;color:#5a6e5a;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.6rem">Contacto directo</div>
+    <a href="tel:+56944061866" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#1a2e1a;padding:6px 0;border-bottom:1px solid #f0f2f0">
+      <div style="width:32px;height:32px;border-radius:50%;background:#d4edda;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">📱</div>
+      <div><div style="font-weight:600;font-size:14px">Celular</div><div style="font-size:12px;color:#7a8a7a">+56 9 4406 1866</div></div>
+    </a>
+    <a href="tel:+56322151748" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#1a2e1a;padding:6px 0">
+      <div style="width:32px;height:32px;border-radius:50%;background:#d0e8f5;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">☎</div>
+      <div><div style="font-weight:600;font-size:14px">Teléfono fijo</div><div style="font-size:12px;color:#7a8a7a">32 215 1748</div></div>
+    </a>
+  </div>
+
+  <a href="https://www.inasep.cl/2024/07/21/cursos-para-guardias/" target="_blank" rel="noopener"
+     style="display:block;margin-top:.75rem;background:#3a6a3a;border:none;border-radius:12px;padding:14px 16px;font-size:15px;font-weight:700;color:#fff;text-align:center;text-decoration:none;box-shadow:0 2px 8px rgba(58,106,58,.25)">
+    Más Información — Click Aquí
+  </a>
+
+  <div class="updated" id="updated-ts"></div>
+  <div class="admin-toggle" onclick="showPanel()">⚙ Administrador</div>
+
+  <!-- PANEL ADMIN -->
+  <div class="admin-panel" id="admin-panel">
+    <div id="lock-section" class="lock-form">
+      <div class="field-group"><div class="field-label">Email</div><input type="email" id="admin-email" placeholder="usuario@correo.cl" autocomplete="username"/></div>
+      <div class="field-group"><div class="field-label">Contraseña</div><input type="password" id="admin-pwd" placeholder="••••••" autocomplete="current-password"/></div>
+      <div id="login-error" style="font-size:12px;color:#c62828;margin-bottom:.5rem;display:none"></div>
+      <button class="save-btn" onclick="doLogin()">Entrar</button>
+    </div>
+    <div id="edit-section" style="display:none">
+      <div class="admin-title">✏ Editar información</div>
+      <div class="field-group"><div class="field-label">Cupos disponibles</div><input type="number" id="e-cupos" min="0" max="999"/></div>
+      <div class="field-group"><div class="field-label">Total de cupos</div><input type="number" id="e-total" min="1" max="999"/></div>
+      <div class="divider"></div>
+      <div class="field-group"><div class="field-label">Título del curso</div><input type="text" id="e-title"/></div>
+      <div class="field-group"><div class="field-label">Subtítulo</div><input type="text" id="e-sub"/></div>
+      <div class="field-group"><div class="field-label">Fecha de inicio</div><input type="text" id="e-fecha"/></div>
+      <div class="field-group"><div class="field-label">Inscripciones hasta</div><input type="text" id="e-inscripciones"/></div>
+      <div class="field-group"><div class="field-label">Horario</div><input type="text" id="e-horario"/></div>
+      <div class="field-group"><div class="field-label">Duración</div><input type="text" id="e-duracion"/></div>
+      <div class="field-group"><div class="field-label">Precio</div><input type="text" id="e-precio"/></div>
+      <div class="divider"></div>
+      <div class="field-group"><div class="field-label">Dirección</div><input type="text" id="e-dir"/></div>
+      <button class="save-btn" onclick="saveData()">Guardar y publicar ✓</button>
+      <button class="save-btn" onclick="doLogout()" style="background:#888;margin-top:.4rem">Cerrar sesión</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Firebase al FINAL del body (no bloquea el renderizado) -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+<script>
+const WA  = '56944061866';
+const WEB = 'https://www.inasep.cl';
+
+const defaults = {
+  cupos: 12, total: 20,
+  title: 'Curso de Formación para Guardias de Seguridad Privada',
+  sub: 'Habilitación OS10 · Modalidad presencial',
+  fecha: 'Sábado 3 de mayo 2025',
+  inscripciones: '',
+  horario: '09:00 – 17:00 hrs',
+  duracion: '2 sábados',
+  lugar: 'Aníbal Pinto 875, Quilpué',
+  precio: '$120.000 CLP',
+  ts: null
+};
+
+// ── Inicializar Firebase ──
+const firebaseConfig = {
+  apiKey: "AIzaSyDKolgHQDoTrZ5zDA_qkq4gGsdbVYam8V4",
+  authDomain: "cursos-os10.firebaseapp.com",
+  databaseURL: "https://cursos-os10-default-rtdb.firebaseio.com",
+  projectId: "cursos-os10",
+  storageBucket: "cursos-os10.firebasestorage.app",
+  messagingSenderId: "119038299630",
+  appId: "1:119038299630:web:a09a698d26fa7b445dd2ff"
+};
+firebase.initializeApp(firebaseConfig);
+const db   = firebase.database();
+const auth = firebase.auth();
+
+// ── Quitar skeleton de las filas ──
+function removeSkel() {
+  document.querySelectorAll('.skel').forEach(function(el){ el.classList.remove('skel'); });
+}
+
+// ── Render ──
+function render(d) {
+  var cupos = d.cupos != null ? d.cupos : defaults.cupos;
+  var total = d.total || defaults.total;
+  var pct   = cupos / total;
+
+  document.getElementById('course-title-disp').textContent = d.title || defaults.title;
+  document.getElementById('course-sub-disp').textContent   = d.sub   || defaults.sub;
+  document.getElementById('cupos-num').textContent         = cupos;
+  document.getElementById('cupos-sub').textContent         = 'De ' + total + ' cupos totales';
+
+  var card = document.getElementById('cupos-card');
+  card.className = 'cupos-card loaded ' + (pct > 0.4 ? 'cupos-high' : pct > 0.15 ? 'cupos-mid' : 'cupos-low');
+
+  document.getElementById('fecha-inicio').textContent       = d.fecha        || defaults.fecha;
+  updateInscripcionesUI(d.inscripciones || '');
+  document.getElementById('horario').textContent            = d.horario       || defaults.horario;
+  document.getElementById('duracion').textContent           = d.duracion      || defaults.duracion;
+  document.getElementById('lugar').textContent              = d.lugar         || defaults.lugar;
+  document.getElementById('precio').textContent             = d.precio        || defaults.precio;
+
+  var ts = document.getElementById('updated-ts');
+  if (d.ts) {
+    ts.innerHTML = '<span class="live-dot"></span>Actualizado: ' + d.ts;
+  } else {
+    ts.innerHTML = '<span class="live-dot"></span>En vivo';
+  }
+
+  removeSkel();
+  window._fbData = d;
+}
+
+// ── Escuchar cambios en TIEMPO REAL (siempre desde el servidor) ──
+db.ref('curso_actual').on('value', function(snapshot) {
+  var data = snapshot.val();
+  var d    = data ? Object.assign({}, defaults, data) : Object.assign({}, defaults);
+  render(d);
+}, function(error) {
+  // Si falla, mostrar valores por defecto y quitar skeleton
+  render(Object.assign({}, defaults));
+  console.warn('Firebase error:', error);
+});
+
+// ── Auth ──
+function doLogin() {
+  var email = document.getElementById('admin-email').value.trim();
+  var pwd   = document.getElementById('admin-pwd').value;
+  var errEl = document.getElementById('login-error');
+  errEl.style.display = 'none';
+  auth.signInWithEmailAndPassword(email, pwd)
+    .catch(function() {
+      errEl.textContent    = 'Credenciales incorrectas. Verifica tu email y contraseña.';
+      errEl.style.display  = 'block';
+    });
+}
+
+function doLogout() { auth.signOut(); }
+
+auth.onAuthStateChanged(function(user) {
+  var panel = document.getElementById('admin-panel');
+  if (user) {
+    document.getElementById('lock-section').style.display = 'none';
+    document.getElementById('edit-section').style.display = 'block';
+    fillForm(window._fbData || Object.assign({}, defaults));
+  } else {
+    document.getElementById('lock-section').style.display = 'block';
+    document.getElementById('edit-section').style.display = 'none';
+    document.getElementById('admin-pwd').value            = '';
+    document.getElementById('admin-email').value          = '';
+    document.getElementById('login-error').style.display  = 'none';
+    if (panel.style.display === 'block') panel.style.display = 'none';
+  }
+});
+
+function showPanel() {
+  var p = document.getElementById('admin-panel');
+  p.style.display = p.style.display === 'none' ? 'block' : 'none';
+}
+
+function fillForm(d) {
+  document.getElementById('e-cupos').value        = d.cupos != null ? d.cupos : defaults.cupos;
+  document.getElementById('e-total').value        = d.total         || defaults.total;
+  document.getElementById('e-title').value        = d.title         || defaults.title;
+  document.getElementById('e-sub').value          = d.sub           || defaults.sub;
+  document.getElementById('e-fecha').value        = d.fecha         || defaults.fecha;
+  document.getElementById('e-inscripciones').value= d.inscripciones || '';
+  document.getElementById('e-horario').value      = d.horario       || defaults.horario;
+  document.getElementById('e-duracion').value     = d.duracion      || defaults.duracion;
+  document.getElementById('e-dir').value          = d.lugar         || defaults.lugar;
+  document.getElementById('e-precio').value       = d.precio        || defaults.precio;
+}
+
+function saveData() {
+  var ts = new Date().toLocaleString('es-CL', {
+    day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit'
+  });
+  var updates = {
+    cupos        : parseInt(document.getElementById('e-cupos').value)  || 0,
+    total        : parseInt(document.getElementById('e-total').value)  || 20,
+    title        : document.getElementById('e-title').value,
+    sub          : document.getElementById('e-sub').value,
+    fecha        : document.getElementById('e-fecha').value,
+    inscripciones: document.getElementById('e-inscripciones').value,
+    horario      : document.getElementById('e-horario').value,
+    duracion     : document.getElementById('e-duracion').value,
+    lugar        : document.getElementById('e-dir').value,
+    precio       : document.getElementById('e-precio').value,
+    ts           : ts
+  };
+  db.ref('curso_actual').update(updates)
+    .then(function(){ alert('✓ Guardado y actualizado en tiempo real'); })
+    .catch(function(){ alert('Error al guardar. Verifica las reglas de Firebase.'); });
+}
+
+
+// ── Contador de visitas (Firebase) ──
+var VISIT_START = 1254;
+db.ref('visitas').transaction(function(current) {
+  return (current || VISIT_START) + 1;
+}, function(error, committed, snapshot) {
+  if (!error && committed) {
+    document.getElementById('visit-num').textContent = snapshot.val().toLocaleString('es-CL');
+  }
+});
+
+
+// ── Inscripciones: colores y animación según días restantes ──
+function updateInscripcionesUI(fechaStr) {
+  var el    = document.getElementById('inscripciones-hasta');
+  var row   = document.getElementById('row-inscripciones');
+  var badge = document.getElementById('urgente-badge');
+  if (!fechaStr || fechaStr === '—') {
+    el.textContent = '—';
+    row.classList.add('ri-ok');
+    badge.className = 'urgente-badge ri-ok-b';
+    badge.textContent = '✓ Abiertas';
+    return;
+  }
+
+  // Parsear fecha — acepta "DD/MM/YYYY", "DD-MM-YYYY" o "YYYY-MM-DD"
+  var parts, d;
+  if (/\d{4}-\d{2}-\d{2}/.test(fechaStr)) {
+    d = new Date(fechaStr + 'T23:59:59');
+  } else {
+    parts = fechaStr.split(/[\/\-\.]/);
+    if (parts.length === 3) {
+      // Asume DD/MM/YYYY
+      d = new Date(parseInt(parts[2]), parseInt(parts[1])-1, parseInt(parts[0]), 23, 59, 59);
+    }
+  }
+
+  // Mostrar texto original siempre
+  el.textContent = fechaStr;
+
+  if (!d || isNaN(d)) {
+    row.classList.add('ri-ok');
+    badge.className = 'urgente-badge ri-ok-b';
+    badge.textContent = '✓ Abiertas';
+    return;
+  }
+
+  var now  = new Date();
+  var diff = Math.ceil((d - now) / (1000 * 60 * 60 * 24));
+
+  // Limpiar clases previas
+  row.classList.remove('ri-ok','ri-warn','ri-crit','ri-done');
+  badge.classList.remove('ri-ok-b','ri-warn-b','ri-crit-b','ri-done-b');
+
+  if (diff > 10) {
+    row.classList.add('ri-ok');
+    badge.className = 'urgente-badge ri-ok-b';
+    badge.textContent = '✓ ' + diff + ' días';
+  } else if (diff > 3) {
+    row.classList.add('ri-warn');
+    badge.className = 'urgente-badge ri-warn-b';
+    badge.textContent = '⚠ ' + diff + ' días';
+  } else if (diff >= 0) {
+    row.classList.add('ri-crit');
+    badge.className = 'urgente-badge ri-crit-b';
+    badge.textContent = diff === 0 ? '🔴 ¡Hoy cierra!' : '🔴 ' + diff + (diff === 1 ? ' día!' : ' días!');
+  } else {
+    row.classList.add('ri-done');
+    badge.className = 'urgente-badge ri-done-b';
+    badge.textContent = '✗ Cerradas';
+  }
+}
+
+function openWa()  { window.open('https://wa.me/'+WA+'?text=Hola%20INASEP%2C%20me%20interesa%20inscribirme%20en%20el%20curso%20OS10'); }
+function openWeb() { window.open(WEB); }
+function openMap() { window.open('https://maps.google.com/?q=Aníbal+Pinto+875+Quilpué+Chile'); }
+</script>
+</body>
+</html>
