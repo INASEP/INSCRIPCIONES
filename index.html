@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>INASEP – Disponibilidad de Cupos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+
+/* ══════════════════════════════════════
+   VARIABLES & RESET
+══════════════════════════════════════ */
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:        #141821;
+  --s1:        #1a2030;
+  --s2:        #222b3d;
+  --border:    rgba(255,255,255,.10);
+  --border-hi: rgba(255,255,255,.18);
+
+  --green:     #2ecc71;
+  --green-lt:  #58d68d;
+  --green-dim: rgba(46,204,113,.12);
+  --green-glow:rgba(46,204,113,.22);
+
+  --amber:     #f0b350;
+  --amber-dim: rgba(240,179,80,.12);
+
+  --red:       #e74c3c;
+  --red-lt:    #ff6b5b;
+  --red-dim:   rgba(231,76,60,.13);
+
+  --text:      #f0f2f7;
+  --text-2:    #a0aec0;
+  --text-3:    #6b7b94;
+
+  --head: 'Barlow Condensed', sans-serif;
+  --body: 'Barlow', sans-serif;
+  --r:    14px;
+  --r-sm: 10px;
+}
+
+html{ scroll-behavior:smooth }
+
+body{
+  font-family:var(--body);
+  background:var(--bg);
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  padding:1.5rem 1rem 5rem;
+  color:var(--text);
+  position:relative;
+  overflow-x:hidden;
+}
+
+body::before{
+  content:'';
+  position:fixed;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% -10%, rgba(46,204,113,.065) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 30% at 90% 90%,  rgba(46,204,113,.035) 0%, transparent 60%);
+  z-index:0;
+}
+
+body::after{
+  content:'';
+  position:fixed;top:0;right:0;width:1px;height:100%;
+  background:linear-gradient(180deg,transparent,var(--green-glow),transparent);
+  pointer-events:none;z-index:0;
+}
+
+.page{
+  width:100%;max-width:460px;
+  position:relative;z-index:1;
+  animation:pageIn .5s ease both;
+}
+
+/* ══════════════════════════════════════
+   DESKTOP RESPONSIVE
+══════════════════════════════════════ */
+@media (min-width: 700px) {
+  body {
+    padding: 2.5rem 2rem 5rem;
+    font-size: 17px;
+  }
+
+  .page {
+    max-width: 640px;
+  }
+
+  .logo { width: 68px; height: 68px; }
+  .org-tag { font-size: 14px; }
+  .course-title { font-size: 26px; }
+  .course-sub { font-size: 17px; }
+  .live-pill { font-size: 12px; padding: 6px 14px; }
+
+  .avail-num { font-size: 140px; }
+  .avail-unit { font-size: 20px; padding-bottom: 22px; }
+  .avail-sub { font-size: 17px; }
+  .avail-pct { font-size: 15px; }
+  .bar-track { height: 5px; }
+
+  .notice-text { font-size: 16px; }
+  .notice-icon { font-size: 24px; }
+
+  .ficha-row { padding: 1rem 1.5rem; font-size: 17px; }
+  .ficha-key { font-size: 16px; }
+  .ficha-val { font-size: 17px; max-width: 65%; }
+  .ficha-icon { width: 32px; height: 32px; font-size: 15px; }
+  .status-badge { font-size: 12px; padding: 4px 10px; }
+
+  .cta-btn { font-size: 20px; padding: 18px 22px; }
+  .cta-arrow { font-size: 22px; }
+  .cta-btn-secondary { font-size: 18px; padding: 16px 20px; }
+
+  .section-heading { font-size: 14px; }
+  .ci-name { font-size: 18px; }
+  .ci-detail { font-size: 15px; }
+  .ci-icon { width: 44px; height: 44px; font-size: 20px; }
+
+  .ts-label { font-size: 13px; }
+  .admin-link { font-size: 13px; }
+  .visits-row { font-size: 14px; }
+  .visits-num { font-size: 18px; }
+}
+
+@media (min-width: 900px) {
+  .page { max-width: 720px; }
+  .course-title { font-size: 28px; }
+  .avail-num { font-size: 160px; }
+}
+
+@keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ══════════════════════════════════════
+   SKELETON
+══════════════════════════════════════ */
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.skel{
+  background:linear-gradient(90deg,#222b3d 25%,#2d3748 50%,#222b3d 75%);
+  background-size:200% 100%;
+  animation:shimmer 1.5s infinite;
+  border-radius:4px;
+  color:transparent!important;
+  display:inline-block;min-width:64px;
+  pointer-events:none;
+}
+
+/* ══════════════════════════════════════
+   HEADER STRIP
+══════════════════════════════════════ */
+.header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1rem 1.25rem;
+  background:var(--s1);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  margin-bottom:.75rem;
+  position:relative;overflow:hidden;
+}
+.header::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent 0%,var(--green) 40%,var(--green-lt) 60%,transparent 100%);
+  opacity:.75;
+}
+
+.logo-wrap{display:flex;align-items:center;gap:.875rem}
+.logo{
+  width:54px;height:54px;object-fit:contain;
+  filter:drop-shadow(0 0 8px rgba(46,204,113,.35));
+  flex-shrink:0;
+}
+
+.org-tag{
+  font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--text-2);font-weight:600;line-height:1;margin-bottom:4px;
+}
+.course-title{
+  font-family:var(--head);font-size:19px;font-weight:700;
+  color:var(--text);line-height:1.25;letter-spacing:.03em;
+}
+.course-sub{
+  font-size:14px;color:var(--text-2);margin-top:3px;font-weight:500;
+}
+
+.live-pill{
+  display:flex;align-items:center;gap:6px;flex-shrink:0;
+  background:rgba(46,204,113,.12);border:1px solid rgba(46,204,113,.25);
+  border-radius:20px;padding:5px 11px;
+  font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--green-lt);
+}
+.live-dot{
+  width:6px;height:6px;border-radius:50%;background:var(--green-lt);
+  animation:dotPulse 2s ease-in-out infinite;
+}
+@keyframes dotPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.7)}}
+
+/* ══════════════════════════════════════
+   DISPONIBILIDAD CARD
+══════════════════════════════════════ */
+.avail-card{
+  border-radius:var(--r);
+  border:1px solid var(--border);
+  background:var(--s1);
+  padding:1.75rem 1.5rem 1.25rem;
+  margin-bottom:.75rem;
+  position:relative;overflow:hidden;
+  transition:border-color .5s, background .5s;
+}
+
+.avail-num-wrap{
+  display:flex;align-items:flex-end;justify-content:center;gap:.5rem;
+  margin-bottom:.875rem;
+}
+.avail-num{
+  font-family:var(--head);
+  font-size:100px;font-weight:700;line-height:.9;
+  letter-spacing:-2px;
+  color:var(--text-3);
+  transition:color .5s, text-shadow .5s;
+}
+.avail-unit{
+  font-family:var(--head);font-size:17px;font-weight:600;
+  color:var(--text-2);letter-spacing:.08em;text-transform:uppercase;
+  padding-bottom:14px;
+}
+
+.bar-track{
+  height:4px;
+  background:rgba(255,255,255,.08);
+  border-radius:100px;
+  overflow:hidden;
+  margin-bottom:.75rem;
+}
+.bar-fill{
+  height:100%;border-radius:100px;
+  background:var(--green);
+  transition:width .9s cubic-bezier(.22,.61,.36,1), background .5s;
+  position:relative;
+}
+.bar-fill::after{
+  content:'';
+  position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),transparent);
+  animation:shine 2.5s infinite;
+}
+@keyframes shine{0%{transform:translateX(-100%)}100%{transform:translateX(200%)}}
+
+.avail-meta{
+  display:flex;align-items:center;justify-content:space-between;
+}
+.avail-sub{
+  font-size:14.5px;color:var(--text-2);font-weight:500;
+}
+.avail-pct{
+  font-size:12.5px;font-weight:600;color:var(--text-2);
+}
+
+/* ── Estados de color ── */
+.avail-card.s-high{border-color:rgba(46,204,113,.25);background:linear-gradient(160deg,#0f1f18,#121e1e)}
+.avail-card.s-high .avail-num{color:var(--green);text-shadow:0 0 50px rgba(46,204,113,.3)}
+.avail-card.s-high .bar-fill{background:var(--green)}
+.avail-card.s-high .avail-pct{color:var(--green)}
+
+.avail-card.s-mid{border-color:rgba(240,179,80,.22);background:linear-gradient(160deg,#1a160d,#1e1912)}
+.avail-card.s-mid .avail-num{color:var(--amber);text-shadow:0 0 50px rgba(240,179,80,.25)}
+.avail-card.s-mid .bar-fill{background:var(--amber)}
+.avail-card.s-mid .avail-pct{color:var(--amber)}
+
+.avail-card.s-low{border-color:rgba(231,76,60,.32);background:linear-gradient(160deg,#1e0f0d,#1a0c0a)}
+.avail-card.s-low .avail-num{color:var(--red-lt);text-shadow:0 0 50px rgba(231,76,60,.35)}
+.avail-card.s-low .bar-fill{background:var(--red-lt)}
+.avail-card.s-low .avail-pct{color:var(--red-lt)}
+
+/* Alerta discreta (≤10 cupos) */
+.notice-low{
+  display:none;align-items:center;gap:.875rem;
+  background:rgba(231,76,60,.08);
+  border:1px solid rgba(231,76,60,.22);
+  border-left:3px solid var(--red-lt);
+  border-radius:var(--r-sm);
+  padding:.875rem 1.125rem;
+  margin-bottom:.75rem;
+  animation:fadeSlide .35s ease both;
+}
+.notice-low.visible{display:flex}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.notice-icon{font-size:20px;flex-shrink:0;opacity:.85}
+.notice-text{font-size:13.5px;color:#f5b7b1;line-height:1.4;font-weight:500}
+.notice-text strong{color:var(--red-lt);font-weight:700}
+
+/* ══════════════════════════════════════
+   FICHA DE CURSO
+══════════════════════════════════════ */
+.ficha{
+  background:var(--s1);border:1px solid var(--border);
+  border-radius:var(--r);
+  overflow:hidden;
+  margin-bottom:.75rem;
+}
+.ficha-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.85rem 1.25rem;
+  border-bottom:1px solid var(--border);
+  gap:1rem;
+  font-size:15px;
+}
+.ficha-row:last-child{border-bottom:none}
+.ficha-key{
+  display:flex;align-items:center;gap:.625rem;
+  color:var(--text-2);font-size:14px;font-weight:500;
+  flex-shrink:0;
+}
+.ficha-icon{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--s2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;flex-shrink:0;
+}
+.ficha-val{
+  font-weight:600;color:var(--text);
+  text-align:right;font-size:15px;
+  max-width:60%;
+  word-break:break-word;
+}
+
+.row-fecha{background:rgba(46,204,113,.07)}
+.row-fecha .ficha-key{color:var(--green);font-weight:600}
+.row-fecha .ficha-val{color:var(--green);font-weight:700}
+
+.row-inscripciones{ transition:background .4s }
+.ri-ok  {background:rgba(46,204,113,.06)}
+.ri-ok  .ficha-key, .ri-ok  .ficha-val{color:var(--green)}
+.ri-warn{background:rgba(240,179,80,.07)}
+.ri-warn .ficha-key,.ri-warn .ficha-val{color:#e0a030}
+.ri-crit{background:rgba(231,76,60,.08)}
+.ri-crit .ficha-key,.ri-crit .ficha-val{color:var(--red-lt)}
+.ri-done{background:rgba(255,255,255,.035)}
+.ri-done .ficha-key,.ri-done .ficha-val{color:var(--text-3)}
+
+.status-badge{
+  display:inline-flex;align-items:center;
+  border-radius:20px;padding:3px 8px;
+  font-size:10.5px;font-weight:700;letter-spacing:.05em;
+  text-transform:uppercase;margin-left:5px;
+}
+.sb-ok  {background:rgba(46,204,113,.2);color:var(--green-lt)}
+.sb-warn{background:rgba(240,179,80,.2);color:#e0a030;animation:sbWarn 1.4s infinite}
+@keyframes sbWarn{0%,100%{opacity:1}50%{opacity:.65}}
+.sb-crit{background:rgba(231,76,60,.22);color:var(--red-lt);animation:sbCrit 1s infinite}
+@keyframes sbCrit{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.7;transform:scale(1.06)}}
+.sb-done{background:rgba(255,255,255,.08);color:var(--text-3)}
+
+/* ══════════════════════════════════════
+   CTA PRINCIPAL
+══════════════════════════════════════ */
+.cta-wrap{
+  display:flex;
+  flex-direction:column;
+  gap:.625rem;
+  margin:.25rem 0 .75rem;
+}
+.cta-btn{
+  display:flex;align-items:center;justify-content:center;gap:.75rem;
+  background:var(--green);
+  border:none;border-radius:var(--r);
+  padding:16px 18px;
+  font-family:var(--head);font-size:17px;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;
+  color:#0a1f12;text-decoration:none;
+  cursor:pointer;width:100%;
+  position:relative;overflow:hidden;
+  transition:transform .15s, box-shadow .15s, background .3s;
+  box-shadow:0 4px 28px rgba(46,204,113,.3), 0 1px 0 rgba(255,255,255,.1) inset;
+}
+.cta-btn::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:50%;
+  background:linear-gradient(180deg,rgba(255,255,255,.12),transparent);
+  border-radius:var(--r) var(--r) 0 0;
+}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 36px rgba(46,204,113,.4)}
+.cta-btn:active{transform:translateY(0)}
+.cta-arrow{font-size:20px;line-height:1;transition:transform .2s}
+.cta-btn:hover .cta-arrow{transform:translateX(3px)}
+
+/* ══════════════════════════════════════
+   CTA SECUNDARIO (Más información)
+══════════════════════════════════════ */
+.cta-btn-secondary{
+  display:flex;align-items:center;justify-content:center;gap:.75rem;
+  background:rgba(255,255,255,.06);
+  border:1.5px solid rgba(255,255,255,.22);border-radius:var(--r);
+  padding:14px 18px;
+  font-family:var(--head);font-size:16px;font-weight:700;
+  letter-spacing:.05em;text-transform:uppercase;
+  color:var(--text);text-decoration:none;
+  cursor:pointer;width:100%;
+  position:relative;overflow:hidden;
+  transition:transform .15s, box-shadow .15s, border-color .3s, background .3s;
+  box-shadow:0 2px 16px rgba(0,0,0,.2);
+}
+.cta-btn-secondary::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:50%;
+  background:linear-gradient(180deg,rgba(255,255,255,.06),transparent);
+  border-radius:var(--r) var(--r) 0 0;
+}
+.cta-btn-secondary:hover{
+  transform:translateY(-2px);
+  border-color:var(--green-lt);
+  background:rgba(46,204,113,.1);
+  box-shadow:0 6px 24px rgba(46,204,113,.18);
+}
+.cta-btn-secondary:active{transform:translateY(0)}
+.cta-btn-secondary .cta-arrow{font-size:18px}
+
+/* ══════════════════════════════════════
+   CONTACTO
+══════════════════════════════════════ */
+.section-heading{
+  font-size:12.5px;font-weight:700;color:var(--text-3);
+  text-transform:uppercase;letter-spacing:.14em;
+  margin:1rem 0 .5rem .125rem;
+  font-family:var(--head);
+}
+
+.contact-grid{
+  display:grid;gap:.5rem;
+  margin-bottom:.75rem;
+}
+.contact-item{
+  display:flex;align-items:center;gap:.875rem;
+  background:var(--s1);border:1px solid var(--border);
+  border-radius:var(--r-sm);padding:.875rem 1.125rem;
+  text-decoration:none;color:var(--text);
+  cursor:pointer;
+  transition:border-color .15s, background .15s, transform .12s;
+}
+.contact-item:hover{
+  border-color:var(--border-hi);
+  background:var(--s2);
+  transform:translateY(-1px);
+}
+.contact-item:active{transform:translateY(0)}
+
+.ci-icon{
+  width:38px;height:38px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:17px;
+}
+.ci-g{background:var(--green-dim)}
+.ci-b{background:rgba(56,189,248,.12)}
+.ci-o{background:rgba(240,179,80,.12)}
+
+.ci-body{min-width:0;flex:1}
+.ci-name{font-family:var(--head);font-size:16px;font-weight:700;letter-spacing:.03em;line-height:1.2}
+.ci-detail{font-size:13.5px;color:var(--text-2);margin-top:2px}
+
+.ci-chevron{margin-left:auto;color:var(--text-3);font-size:14px;flex-shrink:0}
+
+/* ══════════════════════════════════════
+   FOOTER
+══════════════════════════════════════ */
+.footer-strip{
+  margin-top:.625rem;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.5rem 0;
+}
+.ts-label{
+  font-size:11.5px;color:var(--text-3);
+  display:flex;align-items:center;gap:6px;
+}
+.ts-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--green);
+  animation:dotPulse 2s infinite;
+  flex-shrink:0;
+}
+.admin-link{
+  font-size:11.5px;color:var(--text-3);cursor:pointer;
+  letter-spacing:.04em;font-weight:500;
+  transition:color .15s;
+  background:none;border:none;padding:0;font-family:var(--body);
+}
+.admin-link:hover{color:var(--text-2)}
+
+.visits-row{
+  display:flex;align-items:center;justify-content:center;gap:.625rem;
+  padding:.5rem 1rem;
+  background:var(--s1);border:1px solid var(--border);
+  border-radius:var(--r-sm);
+  font-size:12.5px;color:var(--text-2);
+  margin-bottom:.75rem;
+}
+.visits-num{
+  font-family:var(--head);font-size:15px;font-weight:700;
+  color:var(--green);letter-spacing:.02em;
+}
+
+/* ══════════════════════════════════════
+   ADMIN PANEL
+══════════════════════════════════════ */
+.admin-panel{
+  background:var(--s1);border:1px solid var(--border);
+  border-radius:var(--r);padding:1.25rem;
+  margin-top:.75rem;display:none;
+  animation:fadeSlide .25s ease;
+}
+.admin-panel.open{display:block}
+
+.ap-title{
+  font-family:var(--head);font-size:15px;font-weight:700;
+  letter-spacing:.04em;color:var(--text);
+  margin-bottom:1rem;text-transform:uppercase;
+}
+.field-group{margin-bottom:.7rem}
+.field-label{
+  display:block;font-size:12px;color:var(--text-2);
+  margin-bottom:4px;font-weight:500;
+}
+input[type=text],input[type=number],input[type=password],input[type=email]{
+  width:100%;
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:var(--r-sm);
+  padding:8px 12px;
+  font-size:14px;font-family:var(--body);
+  color:var(--text);outline:none;
+  transition:border-color .15s;
+}
+input:focus{border-color:rgba(46,204,113,.5)}
+.divider{height:1px;background:var(--border);margin:.75rem 0}
+
+.ap-btn{
+  display:block;width:100%;border:none;border-radius:var(--r-sm);
+  padding:10px 16px;font-size:14px;font-weight:700;
+  cursor:pointer;font-family:var(--head);letter-spacing:.05em;
+  text-transform:uppercase;transition:opacity .15s;
+}
+.ap-btn:hover{opacity:.85}
+.ap-save{background:var(--green);color:#0a1f12;margin-top:.5rem}
+.ap-logout{background:var(--s2);color:var(--text-2);margin-top:.4rem}
+
+.lock-form{text-align:center;padding:.25rem 0}
+#login-error{font-size:13px;color:#f5b7b1;margin-bottom:.5rem;display:none}
+
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ═══ HEADER ═══ -->
+  <div class="header">
+    <div class="logo-wrap">
+      <img class="logo" id="logo-img" src="logo.png" alt="INASEP">
+      <div class="header-text">
+        <div class="org-tag">Instituto INASEP SpA · OTEC Acreditada</div>
+        <div class="course-title" id="course-title-disp">Curso Guardias de Seguridad Privada</div>
+        <div class="course-sub" id="course-sub-disp">Habilitación OS10 · Modalidad presencial</div>
+      </div>
+    </div>
+    <div class="live-pill"><span class="live-dot"></span>En vivo</div>
+  </div>
+
+  <!-- ═══ AVISO ÚLTIMOS CUPOS (≤10) ═══ -->
+  <div class="notice-low" id="notice-low">
+    <div class="notice-icon">◈</div>
+    <div class="notice-text">
+      <strong>Disponibilidad limitada.</strong> Quedan pocos cupos para este período. Solicite información para asegurar su lugar.
+    </div>
+  </div>
+
+  <!-- ═══ CARD DISPONIBILIDAD ═══ -->
+  <div class="avail-card" id="avail-card">
+    <div class="avail-num-wrap">
+      <div class="avail-num" id="avail-num">—</div>
+      <div class="avail-unit">cupos</div>
+    </div>
+    <div class="bar-track">
+      <div class="bar-fill" id="bar-fill" style="width:0%"></div>
+    </div>
+    <div class="avail-meta">
+      <div class="avail-sub" id="avail-sub">Verificando disponibilidad…</div>
+      <div class="avail-pct" id="avail-pct"></div>
+    </div>
+  </div>
+
+  <!-- ═══ VISITAS ═══ -->
+  <div class="visits-row">
+    <span>Personas interesadas</span>
+    <span class="visits-num" id="visit-num">—</span>
+  </div>
+
+  <!-- ═══ FICHA DEL CURSO ═══ -->
+  <div class="ficha">
+
+    <div class="ficha-row row-fecha">
+      <div class="ficha-key">
+        <div class="ficha-icon">📅</div>
+        Fecha de inicio
+      </div>
+      <div class="ficha-val skel" id="fecha-inicio">&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;</div>
+    </div>
+
+    <div class="ficha-row row-inscripciones" id="row-inscripciones">
+      <div class="ficha-key">
+        <div class="ficha-icon">⏱</div>
+        Inscripciones hasta
+        <span class="status-badge" id="urgente-badge">⏳</span>
+      </div>
+      <div class="ficha-val skel" id="inscripciones-hasta">&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;</div>
+    </div>
+
+    <div class="ficha-row">
+      <div class="ficha-key"><div class="ficha-icon">🕐</div>Horario</div>
+      <div class="ficha-val skel" id="horario">&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;</div>
+    </div>
+
+    <div class="ficha-row">
+      <div class="ficha-key"><div class="ficha-icon">📆</div>Duración</div>
+      <div class="ficha-val skel" id="duracion">&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;</div>
+    </div>
+
+    <div class="ficha-row">
+      <div class="ficha-key"><div class="ficha-icon">📍</div>Lugar</div>
+      <div class="ficha-val skel" id="lugar">&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;</div>
+    </div>
+
+    <div class="ficha-row">
+      <div class="ficha-key"><div class="ficha-icon">💲</div>Precio</div>
+      <div class="ficha-val skel" id="precio">&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;</div>
+    </div>
+
+  </div>
+
+  <!-- ═══ CTA ═══ -->
+  <div class="cta-wrap">
+    <a class="cta-btn" id="cta-main" href="#" onclick="openWa();return false">
+      <span>Solicitar información de inscripción</span>
+      <span class="cta-arrow">→</span>
+    </a>
+    <a class="cta-btn-secondary" href="https://www.inasep.cl/curso-os10/curso-guardia-de-seguridad-formacion/" target="_blank" rel="noopener noreferrer">
+      <span>📄 Más información y documentos</span>
+      <span class="cta-arrow">→</span>
+    </a>
+  </div>
+
+  <!-- ═══ OTROS CANALES ═══ -->
+  <div class="section-heading">Canales de contacto</div>
+  <div class="contact-grid">
+
+    <a class="contact-item" href="#" onclick="openWa();return false">
+      <div class="ci-icon ci-g">💬</div>
+      <div class="ci-body">
+        <div class="ci-name">WhatsApp INASEP</div>
+        <div class="ci-detail">+56 9 4406 1866 · Atención directa</div>
+      </div>
+      <span class="ci-chevron">›</span>
+    </a>
+
+    <a class="contact-item" href="#" onclick="openWeb();return false">
+      <div class="ci-icon ci-b">🌐</div>
+      <div class="ci-body">
+        <div class="ci-name">Sitio web oficial</div>
+        <div class="ci-detail">www.inasep.cl</div>
+      </div>
+      <span class="ci-chevron">›</span>
+    </a>
+
+    <a class="contact-item" href="#" onclick="openMap();return false">
+      <div class="ci-icon ci-o">🗺</div>
+      <div class="ci-body">
+        <div class="ci-name">Sede institucional</div>
+        <div class="ci-detail">Anibal Pinto 875, Quilpué</div>
+      </div>
+      <span class="ci-chevron">›</span>
+    </a>
+
+    <a class="contact-item" href="tel:+56944061866">
+      <div class="ci-icon ci-g">📱</div>
+      <div class="ci-body">
+        <div class="ci-name">Celular</div>
+        <div class="ci-detail">+56 9 4406 1866</div>
+      </div>
+      <span class="ci-chevron">›</span>
+    </a>
+
+    <a class="contact-item" href="tel:+56322151748">
+      <div class="ci-icon ci-b">☎</div>
+      <div class="ci-body">
+        <div class="ci-name">Teléfono fijo</div>
+        <div class="ci-detail">(32) 215 1748</div>
+      </div>
+      <span class="ci-chevron">›</span>
+    </a>
+
+  </div>
+
+  <!-- ═══ FOOTER ═══ -->
+  <div class="footer-strip">
+    <div class="ts-label">
+      <span class="ts-dot"></span>
+      <span id="updated-ts">Datos en tiempo real</span>
+    </div>
+    <button class="admin-link" onclick="togglePanel()">⚙ Admin</button>
+  </div>
+
+  <!-- ═══ PANEL ADMIN ═══ -->
+  <div class="admin-panel" id="admin-panel">
+
+    <div id="lock-section" class="lock-form">
+      <div class="ap-title">Acceso administrador</div>
+      <div class="field-group">
+        <label class="field-label" for="admin-email">Correo electrónico</label>
+        <input type="email" id="admin-email" placeholder="usuario@correo.cl" autocomplete="username">
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="admin-pwd">Contraseña</label>
+        <input type="password" id="admin-pwd" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <div id="login-error"></div>
+      <button class="ap-btn ap-save" onclick="doLogin()">Ingresar</button>
+    </div>
+
+    <div id="edit-section" style="display:none">
+      <div class="ap-title">✏ Editar información</div>
+      <div class="field-group"><label class="field-label">Cupos disponibles</label><input type="number" id="e-cupos" min="0" max="999"></div>
+      <div class="field-group"><label class="field-label">Total de cupos</label><input type="number" id="e-total" min="1" max="999"></div>
+      <div class="divider"></div>
+      <div class="field-group"><label class="field-label">Título del curso</label><input type="text" id="e-title"></div>
+      <div class="field-group"><label class="field-label">Subtítulo</label><input type="text" id="e-sub"></div>
+      <div class="field-group"><label class="field-label">Fecha de inicio</label><input type="text" id="e-fecha"></div>
+      <div class="field-group"><label class="field-label">Inscripciones hasta</label><input type="text" id="e-inscripciones"></div>
+      <div class="field-group"><label class="field-label">Horario</label><input type="text" id="e-horario"></div>
+      <div class="field-group"><label class="field-label">Duración</label><input type="text" id="e-duracion"></div>
+      <div class="field-group"><label class="field-label">Precio</label><input type="text" id="e-precio"></div>
+      <div class="divider"></div>
+      <div class="field-group" style="display:none"><label class="field-label">Dirección</label><input type="text" id="e-dir"></div>
+      <button class="ap-btn ap-save" onclick="saveData()">Guardar y publicar</button>
+      <button class="ap-btn ap-logout" onclick="doLogout()">Cerrar sesión</button>
+    </div>
+
+  </div>
+
+</div><!-- /page -->
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+<script>
+const WA  = '56944061866';
+const WEB = 'https://www.inasep.cl';
+const ALERT_THRESHOLD = 10;
+
+const LUGAR_FIJO = 'Anibal Pinto 875, Quilpué';
+
+const defaults = {
+  cupos: 12, total: 20,
+  title: 'Curso de Formación para Guardias de Seguridad Privada',
+  sub:   'Habilitación OS10 · Modalidad presencial',
+  fecha: 'Sábado 3 de mayo 2025',
+  inscripciones: '',
+  horario:  '09:00 – 17:00 hrs',
+  duracion: '2 sábados',
+  lugar:    LUGAR_FIJO,
+  precio:   '$120.000 CLP',
+  ts: null
+};
+
+firebase.initializeApp({
+  apiKey:            "AIzaSyDKolgHQDoTrZ5zDA_qkq4gGsdbVYam8V4",
+  authDomain:        "cursos-os10.firebaseapp.com",
+  databaseURL:       "https://cursos-os10-default-rtdb.firebaseio.com",
+  projectId:         "cursos-os10",
+  storageBucket:     "cursos-os10.firebasestorage.app",
+  messagingSenderId: "119038299630",
+  appId:             "1:119038299630:web:a09a698d26fa7b445dd2ff"
+});
+const db   = firebase.database();
+const auth = firebase.auth();
+var _liveData = null;
+
+function removeSkel(){
+  document.querySelectorAll('.skel').forEach(function(el){ el.classList.remove('skel'); });
+}
+
+function render(d){
+  var cupos  = d.cupos != null ? d.cupos : defaults.cupos;
+  var total  = d.total || defaults.total;
+  var pct    = total > 0 ? cupos / total : 0;
+  var pctInt = Math.round(pct * 100);
+
+  document.getElementById('course-title-disp').textContent = d.title || defaults.title;
+  document.getElementById('course-sub-disp').textContent   = d.sub   || defaults.sub;
+
+  document.getElementById('avail-num').textContent = cupos;
+
+  var bar = document.getElementById('bar-fill');
+  bar.style.width = Math.max(2, pctInt) + '%';
+
+  document.getElementById('avail-pct').textContent =
+    cupos + ' / ' + total + ' (' + pctInt + '%)';
+
+  var subText = cupos === 0
+    ? 'Sin cupos disponibles — consulte próximas fechas'
+    : (cupos <= ALERT_THRESHOLD
+        ? 'Disponibilidad limitada — ' + cupos + ' lugar' + (cupos===1?'':'es') + ' restante' + (cupos===1?'':'s')
+        : 'De un total de ' + total + ' cupos');
+  document.getElementById('avail-sub').textContent = subText;
+
+  var card = document.getElementById('avail-card');
+  card.className = 'avail-card';
+  var cls = pct > 0.4 ? 's-high' : pct > 0.15 ? 's-mid' : 's-low';
+  card.classList.add(cls);
+
+  var notice = document.getElementById('notice-low');
+  var isLow  = cupos > 0 && cupos <= ALERT_THRESHOLD;
+  notice.classList.toggle('visible', isLow);
+
+  var cta = document.getElementById('cta-main');
+  cta.innerHTML = (isLow
+    ? '<span>Solicitar información — Cupos limitados</span><span class="cta-arrow">→</span>'
+    : '<span>Solicitar información de inscripción</span><span class="cta-arrow">→</span>');
+
+  document.getElementById('fecha-inicio').textContent = d.fecha    || defaults.fecha;
+  document.getElementById('horario').textContent       = d.horario  || defaults.horario;
+  document.getElementById('duracion').textContent      = d.duracion || defaults.duracion;
+  document.getElementById('lugar').textContent = LUGAR_FIJO;
+  document.getElementById('precio').textContent        = d.precio   || defaults.precio;
+  updateInscripcionesUI(d.inscripciones || '');
+
+  document.getElementById('updated-ts').textContent =
+    d.ts ? 'Actualizado: ' + d.ts : 'Datos en tiempo real';
+
+  removeSkel();
+  _liveData = d;
+}
+
+function updateInscripcionesUI(fechaStr){
+  var el    = document.getElementById('inscripciones-hasta');
+  var row   = document.getElementById('row-inscripciones');
+  var badge = document.getElementById('urgente-badge');
+
+  row.classList.remove('ri-ok','ri-warn','ri-crit','ri-done');
+  badge.className = 'status-badge';
+
+  if(!fechaStr || fechaStr === '—'){
+    el.textContent = '—';
+    row.classList.add('ri-ok');
+    badge.classList.add('sb-ok');
+    badge.textContent = '✓ Abiertas';
+    return;
+  }
+
+  var d;
+  if(/\d{4}-\d{2}-\d{2}/.test(fechaStr)){
+    d = new Date(fechaStr + 'T23:59:59');
+  } else {
+    var p = fechaStr.split(/[\/\-\.]/);
+    if(p.length===3) d = new Date(+p[2], +p[1]-1, +p[0], 23,59,59);
+  }
+
+  el.textContent = fechaStr;
+
+  if(!d || isNaN(d)){
+    row.classList.add('ri-ok');
+    badge.classList.add('sb-ok');
+    badge.textContent = '✓ Abiertas';
+    return;
+  }
+
+  var diff = Math.ceil((d - new Date()) / 864e5);
+
+  if(diff > 10){
+    row.classList.add('ri-ok');
+    badge.classList.add('sb-ok');
+    badge.textContent = '✓ ' + diff + ' días';
+  } else if(diff > 3){
+    row.classList.add('ri-warn');
+    badge.classList.add('sb-warn');
+    badge.textContent = diff + ' días';
+  } else if(diff >= 0){
+    row.classList.add('ri-crit');
+    badge.classList.add('sb-crit');
+    badge.textContent = diff === 0 ? '¡Cierra hoy!' : diff + (diff===1?' día!':' días!');
+  } else {
+    row.classList.add('ri-done');
+    badge.classList.add('sb-done');
+    badge.textContent = 'Cerradas';
+  }
+}
+
+db.ref('curso_actual').on('value', function(snap){
+  render(Object.assign({}, defaults, snap.val() || {}));
+}, function(){ render(Object.assign({}, defaults)); });
+
+db.ref('visitas').transaction(function(v){ return (v||1254)+1; },
+  function(err, ok, snap){ if(!err&&ok) document.getElementById('visit-num').textContent = snap.val().toLocaleString('es-CL'); });
+
+function doLogin(){
+  var errEl = document.getElementById('login-error');
+  errEl.style.display = 'none';
+  auth.signInWithEmailAndPassword(
+    document.getElementById('admin-email').value.trim(),
+    document.getElementById('admin-pwd').value
+  ).catch(function(){
+    errEl.textContent   = 'Credenciales incorrectas.';
+    errEl.style.display = 'block';
+  });
+}
+function doLogout(){ auth.signOut(); }
+
+auth.onAuthStateChanged(function(user){
+  document.getElementById('lock-section').style.display = user ? 'none' : 'block';
+  document.getElementById('edit-section').style.display = user ? 'block' : 'none';
+  if(user){
+    if(_liveData){ fillForm(_liveData); }
+    else{ db.ref('curso_actual').once('value', function(s){ fillForm(Object.assign({}, defaults, s.val()||{})); }); }
+  }
+  if(!user){
+    document.getElementById('admin-pwd').value   = '';
+    document.getElementById('admin-email').value = '';
+    document.getElementById('login-error').style.display = 'none';
+    var p = document.getElementById('admin-panel');
+    if(p.classList.contains('open')) p.classList.remove('open');
+  }
+});
+
+function togglePanel(){
+  document.getElementById('admin-panel').classList.toggle('open');
+}
+function fillForm(d){
+  document.getElementById('e-cupos').value         = d.cupos        != null ? d.cupos : defaults.cupos;
+  document.getElementById('e-total').value         = d.total         || defaults.total;
+  document.getElementById('e-title').value         = d.title         || defaults.title;
+  document.getElementById('e-sub').value           = d.sub           || defaults.sub;
+  document.getElementById('e-fecha').value         = d.fecha         || defaults.fecha;
+  document.getElementById('e-inscripciones').value = d.inscripciones || '';
+  document.getElementById('e-horario').value       = d.horario       || defaults.horario;
+  document.getElementById('e-duracion').value      = d.duracion      || defaults.duracion;
+  document.getElementById('e-dir').value           = d.lugar         || defaults.lugar;
+  document.getElementById('e-precio').value        = d.precio        || defaults.precio;
+}
+function saveData(){
+  var ts = new Date().toLocaleString('es-CL',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  db.ref('curso_actual').update({
+    cupos:         parseInt(document.getElementById('e-cupos').value)  || 0,
+    total:         parseInt(document.getElementById('e-total').value)  || 20,
+    title:         document.getElementById('e-title').value,
+    sub:           document.getElementById('e-sub').value,
+    fecha:         document.getElementById('e-fecha').value,
+    inscripciones: document.getElementById('e-inscripciones').value,
+    horario:       document.getElementById('e-horario').value,
+    duracion:      document.getElementById('e-duracion').value,
+    lugar:         LUGAR_FIJO,
+    precio:        document.getElementById('e-precio').value,
+    ts:            ts
+  }).then(function(){ alert('✓ Guardado y publicado'); })
+    .catch(function(){ alert('Error al guardar.'); });
+}
+
+function openWa()  { window.open('https://wa.me/'+WA+'?text=Hola%20INASEP%2C%20solicito%20información%20de%20inscripción%20para%20el%20curso%20OS10'); }
+function openWeb() { window.open(WEB); }
+function openMap() { window.open('https://www.google.com/maps?q=-33.0473734,-71.445284'); }
+</script>
+</body>
+</html>
