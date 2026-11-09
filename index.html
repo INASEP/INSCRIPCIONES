@@ -543,7 +543,7 @@ input:focus{border-color:rgba(46,204,113,.55)}
     </div>
     <div>
       <div class="ob-eye">Cómo funciona</div>
-      <div class="ob-title">Inscríbete como te acomode.Inscripciones Online o Presenciales.</div>
+      <div class="ob-title">Inscríbete como te acomode. Inscripciones Online o Presenciales.</div>
       <p class="ob-txt">Puedes inscribirte <b>online</b>, con todo tu proceso en la plataforma de documentos INASEP, o <b>presencialmente en nuestro instituto</b> (Anibal Pinto 875, Quilpué). Tú eliges. Las clases del curso de Formación de Guardias son <b>100% presenciales</b>.</p>
       <div class="ob-tags"><span>Inscripción online</span><span>Inscripción en el instituto</span><span>Clases 100% presenciales</span></div>
     </div>
@@ -897,13 +897,13 @@ function render(d){
   var card = $('avail-card');
   card.className = 'seat-card ' + (isZero ? 's-done' : isCritical ? 's-critical' : isLow ? 's-low' : isMid ? 's-mid' : 's-high');
 
-  var tag = isZero ? 'Completo' : isCritical ? 'Casi completo' : isLow ? 'Últimos lugares' : isMid ? 'Se están llenando' : 'Cupos abiertos';
+  var tag = isZero ? 'Completo' : isCritical ? 'Casi completo' : isLow ? 'Últimos lugares' : isMid ? 'Se están Completando' : 'Cupos abiertos';
   $('seat-tag').textContent = tag;
 
   var sub = isZero ? 'Sin cupos — escríbenos y te dejamos en lista de espera'
     : isCritical ? (cupos === 1 ? '🔥 Queda 1 solo cupo' : '🔥 Quedan solo ' + cupos + ' cupos')
     : isLow ? 'Quedan ' + cupos + ' lugares — se están ocupando'
-    : isMid ? 'Quedan ' + cupos + ' cupos — se están llenando'
+    : isMid ? 'Quedan ' + cupos + ' cupos — se están Completando'
     : taken > 0 ? '<b>' + taken + '</b> ya aseguraron su lugar'
     : 'Todos los cupos disponibles';
   $('avail-sub').innerHTML = sub;
