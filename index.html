@@ -902,8 +902,8 @@ function render(d){
 
   var sub = isZero ? 'Sin cupos — escríbenos y te dejamos en lista de espera'
     : isCritical ? (cupos === 1 ? '🔥 Queda 1 solo cupo' : '🔥 Quedan solo ' + cupos + ' cupos')
-    : isLow ? 'Quedan ' + cupos + ' lugares — se están ocupando'
-    : isMid ? 'Quedan ' + cupos + ' cupos — se están Completando'
+    : isLow ? 'Quedan ' + cupos + ' lugares — Quedan algunos cupos'
+    : isMid ? 'Quedan ' + cupos + ' cupos — se están Agotando los Cupos'
     : taken > 0 ? '<b>' + taken + '</b> ya aseguraron su lugar'
     : 'Todos los cupos disponibles';
   $('avail-sub').innerHTML = sub;
