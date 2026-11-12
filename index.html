@@ -200,8 +200,6 @@ a{color:inherit}
 .cta-btn:active{transform:translateY(1px) scale(.985);filter:brightness(.9)}
 .cta-btn svg{width:23px;height:23px;flex-shrink:0}
 .cta-btn span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.cta-btn.is-critical{background:linear-gradient(180deg,#ff8a7a,#ff6b5b 58%,#e0503f);box-shadow:0 12px 24px -10px rgba(0,0,0,.6),0 6px 30px rgba(255,107,91,.35);color:#2a0a05}
-.cta-btn.is-closed{background:linear-gradient(180deg,#3a4560,#2c364e);color:var(--text);box-shadow:none;animation:none}
 
 .share-btn{flex-shrink:0;width:58px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:rgba(255,255,255,.04);border:1.5px solid var(--line-hi);border-radius:var(--r);color:var(--text-2);transition:.2s}
 .share-btn:hover{border-color:var(--green-lt);color:var(--green-lt);transform:translateY(-2px)}
@@ -934,11 +932,6 @@ function render(d){
     : isCritical ? '¡Inscribirme ahora!'
     : isLow ? 'Inscribirme y asegurar Cupo'
     : 'Consultar cupo';
-  ['cta-main','cta-final'].forEach(function(id){
-    var el = $(id);
-    el.classList.toggle('is-critical', (isCritical || isLow) && !closed);
-    el.classList.toggle('is-closed', closed);
-  });
   $('cta-label').textContent = label;
   $('cta-final-label').textContent = label;
   $('st-cta-label').textContent = closed ? 'Lista de espera' : 'Consultar';
