@@ -897,7 +897,7 @@ function render(d){
   var card = $('avail-card');
   card.className = 'seat-card ' + (isZero ? 's-done' : isCritical ? 's-critical' : isLow ? 's-low' : isMid ? 's-mid' : 's-high');
 
-  var tag = isZero ? 'Completo' : isCritical ? 'Casi completo' : isLow ? 'Últimos lugares' : isMid ? 'Se están Completando' : 'Cupos abiertos';
+  var tag = isZero ? 'Sin Cupos' : isCritical ? 'Casi sin Cupos' : isLow ? 'Últimos Cupos' : isMid ? 'Se están Completando' : 'Cupos abiertos';
   $('seat-tag').textContent = tag;
 
   var sub = isZero ? 'Sin cupos — escríbenos y te dejamos en lista de espera'
@@ -932,7 +932,7 @@ function render(d){
   var closed = _mode === 'closed' || isZero;
   var label = closed ? 'Avísame del próximo curso'
     : isCritical ? '¡Inscribirme ahora!'
-    : isLow ? 'Inscribirme antes que se llene'
+    : isLow ? 'Inscribirme y asegurar Cupo'
     : 'Consultar cupo';
   ['cta-main','cta-final'].forEach(function(id){
     var el = $(id);
