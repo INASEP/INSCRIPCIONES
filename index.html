@@ -174,7 +174,7 @@ footer{padding:2rem 0;text-align:center;color:var(--tx2);font-size:14px}footer .
   <div id="ts">Datos en tiempo real</div>
   <button class="adm" type="button" onclick="document.getElementById('adm').classList.toggle('open')">⚙ Admin</button>
   <div class="admin" id="adm">
-    <div id="lock"><label>Correo</label><input type="email" id="ae" autocomplete="username"><label>Contraseña</label><input type="password" id="ap" autocomplete="current-password"><p id="aerr" style="color:var(--red);font-size:14px"></p><button onclick="login()">Ingresar</button></div>
+    <form id="lock" onsubmit="login();return false"><label>Correo</label><input type="email" id="ae" name="email" autocomplete="username"><label>Contraseña</label><input type="password" id="ap" name="password" autocomplete="current-password"><p id="aerr" style="color:var(--red);font-size:14px"></p><button type="submit">Ingresar</button></form>
     <div id="edit" hidden>
       <label>Cupos disponibles</label><input type="number" id="e-cupos" min="0"><label>Total de cupos</label><input type="number" id="e-total" min="1">
       <label>Título</label><input id="e-title"><label>Subtítulo</label><input id="e-sub">
@@ -235,15 +235,17 @@ function hrs(){try{var p={};new Intl.DateTimeFormat('en-US',{timeZone:'America/S
  var on=['Mon','Tue','Wed','Thu','Fri'].indexOf(p.weekday)>-1&&(+p.hour%24)>=9&&(+p.hour%24)<18;
  $('hours').textContent=on?'🟢 Atendiendo ahora por WhatsApp':'Fuera de horario: te respondemos al volver (L–V, 9:00–18:00)'}catch(e){}}
 hrs();setInterval(hrs,60000);
-db.ref('curso_actual').on('value',function(s){render(Object.assign({},D,s.val()||{}))},function(){render(Object.assign({},D))});
+var user=null,dirty=false,loaded=false;
+function fill(){var d=live;if(!d)return;$('e-cupos').value=d.cupos;$('e-total').value=d.total;$('e-title').value=d.title||'';$('e-sub').value=d.sub||'';$('e-fecha').value=d.fecha||'';$('e-insc').value=d.inscripciones||'';$('e-horario').value=d.horario||'';$('e-duracion').value=d.duracion||'';$('e-precio').value=d.precio||'';dirty=false}
+document.addEventListener('input',function(e){if(e.target.closest&&e.target.closest('#edit'))dirty=true});
+db.ref('curso_actual').on('value',function(s){loaded=true;render(Object.assign({},D,s.val()||{}));if(user&&!dirty)fill()},function(){render(Object.assign({},D))});
 setTimeout(function(){if(!done)render(Object.assign({},D))},4500);
 (function(){var b=$('sticky'),c=$('cta');if(!('IntersectionObserver' in window)){b.classList.add('show');return}
  new IntersectionObserver(function(e){var s=!e[0].isIntersecting&&e[0].boundingClientRect.top<0;b.classList.toggle('show',s);$('stc').tabIndex=s?0:-1}).observe(c)})();
 function toast(m){var t=$('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2200)}
 function login(){$('aerr').textContent='';auth.signInWithEmailAndPassword($('ae').value.trim(),$('ap').value).catch(function(){$('aerr').textContent='Credenciales incorrectas.'})}
-auth.onAuthStateChanged(function(u){$('lock').hidden=!!u;$('edit').hidden=!u;if(u){var d=live||D;
- $('e-cupos').value=d.cupos;$('e-total').value=d.total;$('e-title').value=d.title||D.title;$('e-sub').value=d.sub||D.sub;$('e-fecha').value=d.fecha||'';$('e-insc').value=d.inscripciones||'';$('e-horario').value=d.horario||D.horario;$('e-duracion').value=d.duracion||'';$('e-precio').value=d.precio||''}});
-function save(){db.ref('curso_actual').update({cupos:parseInt($('e-cupos').value)||0,total:parseInt($('e-total').value)||20,title:$('e-title').value,sub:$('e-sub').value,fecha:$('e-fecha').value,inscripciones:$('e-insc').value,horario:$('e-horario').value,duracion:$('e-duracion').value,lugar:LUGAR,precio:$('e-precio').value,ts:new Date().toLocaleString('es-CL',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})}).then(function(){toast('✓ Guardado y publicado')}).catch(function(){toast('Error al guardar')})}
+auth.onAuthStateChanged(function(u){user=u;$('lock').hidden=!!u;$('edit').hidden=!u;if(u&&loaded)fill()});
+function save(){if(!loaded){toast('Aún cargando los datos, espera un momento');return}db.ref('curso_actual').update({cupos:parseInt($('e-cupos').value)||0,total:parseInt($('e-total').value)||20,title:$('e-title').value,sub:$('e-sub').value,fecha:$('e-fecha').value,inscripciones:$('e-insc').value,horario:$('e-horario').value,duracion:$('e-duracion').value,lugar:LUGAR,precio:$('e-precio').value,ts:new Date().toLocaleString('es-CL',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})}).then(function(){dirty=false;toast('✓ Guardado y publicado')}).catch(function(e){toast(e&&e.code==='PERMISSION_DENIED'?'Sin permiso: vuelve a iniciar sesión':'Error al guardar')})}
 (function(){var c=false;try{c=sessionStorage.getItem('inasep_v')==='1'}catch(e){}
  function show(n){n=+n||0;if(n>=50){var el=$('visit-num'),t0=null,to=n;function s(ts){if(t0===null)t0=ts;var p=Math.min(1,(ts-t0)/1200);el.textContent=Math.round(to*(1-Math.pow(1-p,3))).toLocaleString('es-CL');if(p<1)requestAnimationFrame(s)}requestAnimationFrame(s);$('viewers').hidden=false}}
  if(c)db.ref('visitas').once('value',function(s){show(s.val())});
