@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0b0f17"><title>INASEP – Curso Guardias de Seguridad</title>
+<meta name="theme-color" content="#0b0f17"><title>INASEP – Curso Guardias de Seguridad | Instituto Nacional de Seguridad Privada</title>
 <meta name="description" content="Curso de Guardias de Seguridad Privada en Quilpué. Cupos en vivo, fecha de inicio, precio y documentos. Instituto INASEP, OTEC acreditada.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
@@ -31,7 +31,7 @@ h1{font:700 clamp(2.4rem,7vw,4.6rem)/1.12 var(--h);padding-bottom:.12em;margin:.
 .fact{background:var(--s1);border:1px solid var(--line);border-radius:16px;padding:.9rem 1rem}
 .fact small{display:block;color:var(--gold);font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
 .fact b{display:block;font:700 clamp(1.15rem,3.2vw,1.55rem)/1.15 var(--h);margin-top:.2rem;overflow-wrap:anywhere}
-@media(max-width:520px){.facts{grid-template-columns:1fr 1fr}.fact:first-child{grid-column:1/-1}}
+
 /* seat card */
 .seat{background:linear-gradient(160deg,var(--s2),var(--s1));border:1px solid var(--line);border-radius:26px;padding:1.6rem;box-shadow:0 30px 80px -30px rgba(46,204,113,.35)}
 .seat-top{display:flex;align-items:baseline;gap:.8rem}
@@ -97,13 +97,56 @@ footer{padding:2rem 0;text-align:center;color:var(--tx2);font-size:14px}footer .
 .inc-foot{margin-top:1.4rem;text-align:center;color:var(--gold);font-weight:600;font-size:1.1rem}
 .rv.pre{opacity:0;transform:translateY(26px);transition:opacity .7s,transform .7s}.rv.pre.in{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ===== v2 premium ===== */
+:root{--gold2:#f6e7c1}
+.topbar{background:linear-gradient(90deg,rgba(230,207,157,.16),rgba(230,207,157,.05));border-bottom:1px solid rgba(230,207,157,.22);font-size:13.5px;color:var(--gold)}
+.topbar .wrap{display:flex;justify-content:space-between;align-items:center;gap:1rem;min-height:38px;padding-top:env(safe-area-inset-top)}
+.topbar span{display:flex;align-items:center;gap:.5rem}.topbar svg,.cred svg{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.topbar a{font-weight:700;text-decoration:none;color:var(--gold2);border-bottom:1px solid rgba(230,207,157,.5);white-space:nowrap}
+header{padding:1.1rem 0 1rem;border-bottom:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.04),transparent)}
+header .wrap.hd{padding:0}
+.brand{text-decoration:none;gap:1rem}
+.logo{position:relative;flex:none;width:68px;height:68px;border-radius:20px;display:grid;place-items:center;background:linear-gradient(150deg,#1d6b43,#0f2a22 70%);border:1px solid rgba(230,207,157,.55);box-shadow:0 14px 34px -14px rgba(46,204,113,.7),inset 0 1px 0 rgba(255,255,255,.18)}
+.logo img{position:absolute;inset:0;width:100%;height:100%;padding:7px;object-fit:contain}
+.logo .mono{width:38px;height:38px;fill:none;stroke:var(--gold2);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.brand .bt b{font:700 clamp(1.7rem,6vw,2.5rem)/1 var(--h);letter-spacing:.06em;background:linear-gradient(180deg,#fff,var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.brand .bt small{display:block;margin-top:.3rem;font-size:clamp(13px,3.4vw,16px);color:var(--tx);opacity:.85}
+.hr{display:flex;gap:.6rem;align-items:center}
+.hlink{font-size:15px}.hlink.wa{background:linear-gradient(180deg,#34d97b,#1fb862);color:#04170d;border:0;font-weight:700;padding:.7rem 1.3rem;box-shadow:0 10px 24px -10px rgba(46,204,113,.8)}
+@media(max-width:640px){.hlink.site{display:none}.topbar span{font-size:12.5px}.logo{width:56px;height:56px;border-radius:16px}}
+header .wrap.creds{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:.5rem;margin-top:.9rem}
+.cred{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem .85rem;border-radius:99px;font-size:14px;font-weight:600;color:var(--gold2);border:1px solid rgba(230,207,157,.35);background:rgba(230,207,157,.07)}
+.fact small{text-transform:none;letter-spacing:.02em;font-size:14px;font-weight:600}
+.facts{grid-template-columns:1fr 1fr!important}.fact.wide{grid-column:1/-1}
+.facts .fact.dead{position:relative;display:flex;flex-direction:column;align-items:flex-start;border:1px solid rgba(230,207,157,.6);background:linear-gradient(150deg,rgba(230,207,157,.22),rgba(230,207,157,.05) 75%),var(--s1);box-shadow:0 18px 40px -22px rgba(230,207,157,.65),inset 0 1px 0 rgba(255,255,255,.08)}
+.fact.dead small{color:var(--gold2)}.fact.dead b{color:#fff}
+.fact.dead span{margin-top:.55rem;font-size:13px;font-weight:700;line-height:1.2;padding:.3rem .7rem;border-radius:99px;background:rgba(46,204,113,.16);color:var(--g2)}
+.fact.dead.warn span{background:rgba(240,179,80,.18);color:var(--amb)}.fact.dead.crit span{background:rgba(255,107,91,.18);color:var(--red)}.fact.dead.done span{background:rgba(255,255,255,.08);color:var(--tx2)}
+.fact{min-width:0}.hero>*{min-width:0}.s-unk{--tone:var(--gold)}
+@media(max-width:380px){.facts{gap:.5rem!important}.fact{padding:.75rem .8rem}.fact b{font-size:1.1rem}.seat{padding:1.2rem}}
+.cd p{text-align:center;color:var(--gold2);font-weight:600}
+.cd div{background:linear-gradient(180deg,rgba(0,0,0,.4),rgba(0,0,0,.2));border:1px solid rgba(230,207,157,.25);border-radius:14px;padding:.7rem 0}
+.cd b{font-size:2.2rem;font-variant-numeric:tabular-nums}.cd span{font-size:12px;text-transform:none;letter-spacing:.04em}
+.back{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:1rem;padding:.8rem 1rem;border-radius:16px;border:1px solid rgba(110,231,164,.4);background:linear-gradient(90deg,rgba(46,204,113,.16),rgba(46,204,113,.04))}
+.back p{flex:1 1 240px;font-weight:600}.back .bk{background:var(--g);color:#04170d;font-weight:700;text-decoration:none;padding:.55rem 1.1rem;border-radius:99px}
+.back button{background:none;border:0;color:var(--tx2);font-size:1.5rem;line-height:1;cursor:pointer;padding:0 .3rem}
+.contact{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))!important}
+footer .legal{margin:0 auto 1rem;max-width:40rem;color:var(--tx2)}footer .legal b{color:var(--gold2)}
+@media(max-width:380px){.logo{width:48px;height:48px;border-radius:14px}.logo .mono{width:28px;height:28px}.brand{gap:.6rem}.brand .bt b{font-size:1.4rem;letter-spacing:.03em}.brand .bt small{font-size:12px}.hlink.wa{padding:.55rem .85rem;font-size:14px}header .wrap.hd{gap:.6rem}.topbar a{font-size:12.5px}}
 </style></head>
 <body>
 <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
-<header><div class="wrap">
-  <div class="brand"><img src="logo.png" alt="INASEP" onerror="this.style.display='none'"><div><b>Instituto INASEP</b><small>OTEC acreditada · Quilpué</small></div></div>
-  <a class="hlink" data-wa="inscribir" target="_blank" rel="noopener">WhatsApp</a>
-</div></header>
+<div class="topbar"><div class="wrap"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 5-5"/></svg>Página oficial de inscripción del Instituto INASEP</span><a href="https://www.inasep.cl" target="_blank" rel="noopener">www.inasep.cl</a></div></div>
+<header><div class="wrap hd">
+  <a class="brand" href="https://www.inasep.cl" target="_blank" rel="noopener" aria-label="Instituto INASEP, ir a www.inasep.cl">
+    <span class="logo"><svg class="mono" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l8.5 3.2v6.3c0 5.200-3.600 8.600-8.500 9.900-4.900-1.300-8.500-4.700-8.500-9.900V5.700z"/><path d="M8 12.200l2.800 2.800L16.200 9.500"/></svg><img src="logo.png" alt="" onload="this.previousElementSibling.style.display='none'" onerror="this.remove()"></span>
+    <span class="bt"><b>Instituto INASEP</b><small>Instituto Nacional de Seguridad Privada</small></span>
+  </a>
+  <nav class="hr" aria-label="Accesos"><a class="hlink site" href="https://www.inasep.cl" target="_blank" rel="noopener">Sitio inasep.cl</a><a class="hlink wa" data-wa="inscribir" target="_blank" rel="noopener">WhatsApp</a></nav>
+</div>
+<div class="wrap creds"><span class="cred"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 5-5"/></svg>OTEC autorizada</span><span class="cred"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 5-5"/></svg>SPD autorizada · 4 años</span><span class="cred">Quilpué</span></div></header>
+<div class="wrap"><div class="back" id="back" hidden><p id="backt"></p><a class="bk" data-wa="retorno" target="_blank" rel="noopener" id="bkc">Retomar mi inscripción</a><button type="button" id="backx" aria-label="Cerrar aviso">×</button></div></div>
 
 <main class="wrap">
 <section class="hero">
@@ -112,11 +155,12 @@ footer{padding:2rem 0;text-align:center;color:var(--tx2);font-size:14px}footer .
     <h1 id="title">Curso Guardias de Seguridad Privada</h1>
     <p class="sub" id="sub">Habilitación OS10 · Clases 100% presenciales · Inscripción online o en el instituto</p>
     <div class="facts">
-      <div class="fact"><small>Inicio</small><b id="fecha" class="skel">........</b></div>
-      <div class="fact"><small>Valor</small><b id="precio" class="skel">......</b></div>
+      <div class="fact dead" id="dead"><small>Inscripciones hasta</small><b id="insc" class="skel">..........</b><span id="inscs" class="skel">..........</span></div>
+      <div class="fact"><small>Inicio del curso</small><b id="fecha" class="skel">........</b></div>
       <div class="fact"><small>Duración</small><b id="duracion" class="skel">......</b></div>
+      <div class="fact"><small>Valor</small><b id="precio" class="skel">......</b></div>
+      <div class="fact wide"><small>Horario</small><b id="horario" class="skel" style="font-weight:600">..........</b></div>
     </div>
-    <div class="fact" style="margin-top:.6rem"><small>Horario</small><b id="horario" class="skel" style="font-weight:600">..........</b></div>
     <a class="incl-badge" href="#incluye">✦ Aula virtual · Ensayos OS10 · Documentos gratis · todo incluido</a><br>
     <div class="live" id="viewers" hidden><span class="pd"></span><span><b id="visit-num">—</b> personas han visto este curso</span></div>
   </div>
@@ -155,6 +199,7 @@ footer{padding:2rem 0;text-align:center;color:var(--tx2);font-size:14px}footer .
 </div></section>
 
 <section class="blk"><h2>Preguntas frecuentes</h2>
+  <details><summary>¿Es esta la página oficial de INASEP?</summary><p>Sí. Es la página de inscripción del Instituto INASEP (Instituto Nacional de Seguridad Privada), OTEC autorizada y con autorización SPD vigente por 4 años. Nuestro sitio institucional es <a href="https://www.inasep.cl" target="_blank" rel="noopener"><b>www.inasep.cl</b></a>.</p></details>
   <details><summary>¿Las clases también son online?</summary><p>No. La inscripción puede ser online o presencial, pero las clases del curso de Formación de Guardias son 100% presenciales en Anibal Pinto 875, Quilpué.</p></details>
   <details><summary>¿Qué pasa si ya no quedan cupos?</summary><p>Escríbenos igual: te dejamos en lista para avisarte apenas se abra el siguiente curso.</p></details>
   <details><summary>¿Cuándo me responden?</summary><p>De lunes a viernes, de 9:00 a 18:00 hrs. Si escribes fuera de ese horario, te contactamos apenas volvamos.</p></details>
@@ -164,6 +209,7 @@ footer{padding:2rem 0;text-align:center;color:var(--tx2);font-size:14px}footer .
 <div class="contact">
   <a class="ct" data-map target="_blank" rel="noopener"><small>Cómo llegar</small><b>Anibal Pinto 875, Quilpué</b></a>
   <a class="ct" data-wa="inscribir" target="_blank" rel="noopener"><small>WhatsApp</small><b>+56 9 4406 1866</b></a>
+  <a class="ct" href="https://www.inasep.cl" target="_blank" rel="noopener"><small>Sitio oficial</small><b>www.inasep.cl</b></a>
   <a class="ct" href="tel:+56944061866"><small>Llamar</small><b>+56 9 4406 1866</b></a>
   <a class="ct" href="tel:+56322151748"><small>Fijo</small><b>(32) 215 1748</b></a>
 </div></section>
@@ -171,6 +217,7 @@ footer{padding:2rem 0;text-align:center;color:var(--tx2);font-size:14px}footer .
 
 <footer><div class="wrap">
   <div class="soc"><a href="https://www.facebook.com/InstitutoInasep" target="_blank" rel="noopener">Facebook</a><a href="https://www.instagram.com/institutoinasep/" target="_blank" rel="noopener">Instagram</a><a href="https://x.com/InasepCL" target="_blank" rel="noopener">X</a><a href="https://www.linkedin.com/in/instituto-inasep-49a505318/" target="_blank" rel="noopener">LinkedIn</a></div>
+  <p class="legal"><b>Instituto INASEP</b> · Instituto Nacional de Seguridad Privada · OTEC autorizada · SPD autorizada 4 años · <a href="https://www.inasep.cl" target="_blank" rel="noopener">www.inasep.cl</a></p>
   <div id="ts">Datos en tiempo real</div>
   <button class="adm" type="button" onclick="document.getElementById('adm').classList.toggle('open')">⚙ Admin</button>
   <div class="admin" id="adm">
@@ -178,8 +225,8 @@ footer{padding:2rem 0;text-align:center;color:var(--tx2);font-size:14px}footer .
     <div id="edit" hidden>
       <label>Cupos disponibles</label><input type="number" id="e-cupos" min="0"><label>Total de cupos</label><input type="number" id="e-total" min="1">
       <label>Título</label><input id="e-title"><label>Subtítulo</label><input id="e-sub">
-      <label>Fecha de inicio (activa cuenta regresiva)</label><input id="e-fecha"><label>Inscripciones hasta</label><input id="e-insc">
-      <label>Horario (separa bloques con "/")</label><input id="e-horario"><label>Duración</label><input id="e-duracion"><label>Precio</label><input id="e-precio">
+      <label>Fecha de inicio (activa cuenta regresiva)</label><input id="e-fecha" placeholder="Ej: 7 de diciembre de 2026"><label>Inscripciones hasta</label><input id="e-insc" placeholder="Ej: 3 de diciembre de 2026">
+      <label>Horario (separa bloques con "/")</label><input id="e-horario" placeholder="Ej: 09:00 – 17:00 hrs / sábados"><label>Duración</label><input id="e-duracion"><label>Precio</label><input id="e-precio">
       <button onclick="save()">Guardar y publicar</button><button class="out" onclick="auth.signOut()">Cerrar sesión</button>
     </div>
   </div>
@@ -193,7 +240,7 @@ footer{padding:2rem 0;text-align:center;color:var(--tx2);font-size:14px}footer .
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
 <script>
 var WA='56944061866',MAP='https://www.google.com/maps?q=-33.0473734,-71.445284',LUGAR='Anibal Pinto 875, Quilpué';
-var D={cupos:12,total:20,title:'Curso Guardias de Seguridad Privada',sub:'Habilitación OS10 · Clases 100% presenciales · Inscripción online o en el instituto',fecha:'Por confirmar',inscripciones:'',horario:'09:00 – 17:00 hrs',duracion:'2 sábados',precio:'Consultar'};
+var D={cupos:null,total:null,title:'Curso Guardias de Seguridad Privada',sub:'Habilitación OS10 · Clases 100% presenciales · Inscripción online o en el instituto',fecha:'Por confirmar',inscripciones:'',horario:'Por confirmar',duracion:'Por confirmar',precio:'Consultar'};
 firebase.initializeApp({apiKey:"AIzaSyDKolgHQDoTrZ5zDA_qkq4gGsdbVYam8V4",authDomain:"cursos-os10.firebaseapp.com",databaseURL:"https://cursos-os10-default-rtdb.firebaseio.com",projectId:"cursos-os10",storageBucket:"cursos-os10.firebasestorage.app",messagingSenderId:"119038299630",appId:"1:119038299630:web:a09a698d26fa7b445dd2ff"});
 var db=firebase.database(),auth=firebase.auth(),$=function(i){return document.getElementById(i)},live=null,dl=null,st=null,mode='open',done=false;
 var MES={enero:0,febrero:1,marzo:2,abril:3,mayo:4,junio:5,julio:6,agosto:7,septiembre:8,setiembre:8,octubre:9,noviembre:10,diciembre:11};
@@ -203,28 +250,37 @@ function pf(s,end){if(!s)return null;s=String(s).toLowerCase();var h=end?[23,59,
  if((m=s.match(/(\d{1,2})(?:\s*(?:,|y|e|-|al|a)\s*\d{1,2})*\s*(?:de\s+)?([a-záéíóú]+)(?:\s*(?:de|del)?\s*(\d{4}))?/))&&MES.hasOwnProperty(m[2])){var n=new Date(),yy=m[3]?+m[3]:n.getFullYear(),d=new Date(yy,MES[m[2]],+m[1],h[0],h[1],h[2]);if(!m[3]&&d<n)d=new Date(yy+1,MES[m[2]],+m[1],h[0],h[1],h[2]);return d}
  return null}
 function msg(){var d=live||D,f=d.fecha&&d.fecha!=='Por confirmar'?' que comienza el '+d.fecha:'';
- return (+d.cupos===0||mode==='closed')?'Hola INASEP, quiero quedar en lista de espera para el próximo curso de Guardias de Seguridad. ¿Me avisan cuando abran inscripciones?':'Hola INASEP, quiero consultar por un cupo e inscribirme en el curso "'+(d.title||D.title)+'"'+f+'. ¿Me ayudan con los pasos?'}
+ return ((d.cupos!==null&&d.cupos!==undefined&&d.cupos!==''&&+d.cupos===0)||mode==='closed')?'Hola INASEP, quiero quedar en lista de espera para el próximo curso de Guardias de Seguridad. ¿Me avisan cuando abran inscripciones?':'Hola INASEP, quiero consultar por un cupo e inscribirme en el curso "'+(d.title||D.title)+'"'+f+'. ¿Me ayudan con los pasos?'}
 function links(){document.querySelectorAll('[data-wa]').forEach(function(a){a.href='https://wa.me/'+WA+'?text='+encodeURIComponent(msg())});document.querySelectorAll('[data-map]').forEach(function(a){a.href=MAP})}
 function track(k){try{db.ref('metricas/'+k).transaction(function(v){return(v||0)+1})}catch(e){}}
 document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('[data-wa]');if(a)track('wa_'+a.getAttribute('data-wa'))});
+var ret=false,bx=false;try{ret=localStorage.getItem('inasep_seen')==='1';localStorage.setItem('inasep_seen','1');bx=sessionStorage.getItem('inasep_bx')==='1'}catch(e){}
+$('backx').onclick=function(){bx=true;$('back').hidden=true;try{sessionStorage.setItem('inasep_bx','1')}catch(e){}};
 function render(d){
- var c=Math.max(0,+d.cupos||0),t=+d.total||D.total;if(c>t)t=c;live=d;st=pf(d.fecha,false);dl=pf(d.inscripciones,true);
- var z=c===0,cr=c>0&&c<=3,lo=c>3&&c<=10,mi=c>10&&c<=20;
+ var kn=d.cupos!==null&&d.cupos!==undefined&&d.cupos!=='',c=kn?Math.max(0,+d.cupos||0):0,t=+d.total||0;if(kn&&c>t)t=c;live=d;st=pf(d.fecha,false);dl=pf(d.inscripciones,true);
+ var z=kn&&c===0,cr=kn&&c>0&&c<=3,lo=kn&&c>3&&c<=10,mi=kn&&c>10&&c<=20;
  $('title').textContent=d.title||D.title;$('sub').textContent=d.sub||D.sub;
- $('fecha').textContent=d.fecha||D.fecha;$('precio').textContent=d.precio||D.precio;$('duracion').textContent=d.duracion||D.duracion;
+ $('fecha').textContent=d.fecha||D.fecha;
+ var dfx=dl?Math.ceil((dl-new Date())/864e5):null,ik='';
+ if(dl){$('insc').textContent=d.inscripciones;$('inscs').textContent=dfx<0?'Inscripciones cerradas':dfx===0?'Último día: cierran hoy':dfx===1?'Queda 1 día':'Quedan '+dfx+' días';ik=dfx<0?'done':dfx<=3?'crit':dfx<=10?'warn':''}
+ else if(d.inscripciones){$('insc').textContent=d.inscripciones;$('inscs').textContent='Fecha límite'}
+ else{$('insc').textContent='Hasta agotar cupos';$('inscs').textContent=z?'Cupos completos':'Sin fecha de cierre aún'}
+ $('dead').className='fact dead '+ik;
+ if(ret&&!bx){var bk=(dl&&dfx<0)||z;$('backt').textContent=bk?'Los cupos de este curso están completos. Escríbenos y te avisamos del próximo.':(kn?'Tu cupo sigue disponible: '+(c===1?'queda 1 cupo':'quedan '+c+' cupos'):'Aún estás a tiempo de consultar tu cupo')+(d.inscripciones?' · inscripciones hasta '+d.inscripciones:'')+'.';$('bkc').textContent=bk?'Quedar en lista':'Retomar mi inscripción';$('back').hidden=false}
+ $('precio').textContent=d.precio||D.precio;$('duracion').textContent=d.duracion||D.duracion;
  $('horario').textContent=String(d.horario||D.horario).split('/').map(function(s){return s.trim()}).filter(Boolean).join('  ·  ');
- $('num').textContent=c;$('fill').style.width=(t?c/t*100:0)+'%';$('mpct').textContent=c+' de '+t;
- $('seat').className='seat '+(z?'s-done':cr?'s-crit':lo?'s-low':mi?'s-mid':'s-high');
- $('tag').textContent=z?'Sin cupos':cr?'Casi sin cupos':lo?'Últimos cupos':mi?'Se están completando':'Cupos abiertos';
- $('msub').textContent=z?'Escríbenos y te dejamos en lista de espera':cr?(c===1?'Queda 1 solo cupo':'Quedan solo '+c+' cupos'):(t-c>0?(t-c)+' ya aseguraron su lugar':'Todos los cupos disponibles');
+ $('num').textContent=kn?c:'—';$('fill').style.width=(kn&&t?Math.min(100,c/t*100):0)+'%';$('mpct').textContent=kn&&t?c+' de '+t:'';
+ $('seat').className='seat '+(!kn?'s-unk':z?'s-done':cr?'s-crit':lo?'s-low':mi?'s-mid':'s-high');
+ $('tag').textContent=!kn?'Consulta tu cupo':z?'Sin cupos':cr?'Casi sin cupos':lo?'Últimos cupos':mi?'Se están completando':'Cupos abiertos';
+ $('msub').textContent=!kn?'Confirma la disponibilidad por WhatsApp':z?'Escríbenos y te dejamos en lista de espera':cr?(c===1?'Queda 1 solo cupo':'Quedan solo '+c+' cupos'):(t>c?(t-c)+' ya aseguraron su lugar':'Todos los cupos disponibles');
  var ch=$('chip'),txt='✓ Inscripciones abiertas',cl='chip';mode='open';
  if(dl){var df=Math.ceil((dl-new Date())/864e5);if(df<0){mode='closed';cl+=' done';txt='Inscripciones cerradas'}else if(z){cl+=' done';txt='Cupos completos'}else if(df<=3){cl+=' crit';txt=df===0?'⚠ Cierran hoy':'⚠ Cierran en '+df+(df===1?' día':' días')}else if(df<=10){cl+=' warn';txt='Cierran en '+df+' días'}}else if(z){cl+=' done';txt='Cupos completos'}
  ch.className=cl;ch.textContent=txt;
  var closed=mode==='closed'||z,lab=closed?'Avísame del próximo curso':cr?'¡Inscribirme ahora!':lo?'Inscribirme y asegurar cupo':'Consultar cupo';
  $('ctal').textContent=lab;$('stc').textContent=closed?'Lista de espera':'Consultar';
- $('stm').textContent=z?'Cupos completos':c+(c===1?' cupo':' cupos')+' disponibles';
+ $('stm').textContent=!kn?'Cupos por confirmar':z?'Cupos completos':c+(c===1?' cupo':' cupos')+' disponibles';
  $('sts').textContent=(d.precio&&d.precio!=='Consultar'?d.precio+' · ':'')+(d.fecha&&d.fecha!=='Por confirmar'?'Inicio '+d.fecha:'Clases presenciales');
- document.documentElement.style.setProperty('--tone',z?'var(--tx2)':(cr||lo)?'var(--red)':mi?'var(--amb)':'var(--g2)');
+ document.documentElement.style.setProperty('--tone',!kn?'var(--gold)':z?'var(--tx2)':(cr||lo)?'var(--red)':mi?'var(--amb)':'var(--g2)');
  $('ts').textContent=d.ts?'Actualizado: '+d.ts:'Datos en tiempo real';
  document.querySelectorAll('.skel').forEach(function(e){e.classList.remove('skel')});links();tick();done=true}
 function tick(){var n=new Date(),t=null,l='';if(dl&&dl>n){t=dl;l='Las inscripciones cierran en'}else if(st&&st>n){t=st;l='El curso comienza en'}
@@ -235,17 +291,21 @@ function hrs(){try{var p={};new Intl.DateTimeFormat('en-US',{timeZone:'America/S
  var on=['Mon','Tue','Wed','Thu','Fri'].indexOf(p.weekday)>-1&&(+p.hour%24)>=9&&(+p.hour%24)<18;
  $('hours').textContent=on?'🟢 Atendiendo ahora por WhatsApp':'Fuera de horario: te respondemos al volver (L–V, 9:00–18:00)'}catch(e){}}
 hrs();setInterval(hrs,60000);
-var user=null,dirty=false,loaded=false;
-function fill(){var d=live;if(!d)return;$('e-cupos').value=d.cupos;$('e-total').value=d.total;$('e-title').value=d.title||'';$('e-sub').value=d.sub||'';$('e-fecha').value=d.fecha||'';$('e-insc').value=d.inscripciones||'';$('e-horario').value=d.horario||'';$('e-duracion').value=d.duracion||'';$('e-precio').value=d.precio||'';dirty=false}
+var user=null,dirty=false,loaded=false,saved={};
+function fill(){var d=saved||{};function v(x){return x===null||x===undefined?'':x}
+ $('e-cupos').value=v(d.cupos);$('e-total').value=v(d.total);$('e-title').value=v(d.title);$('e-sub').value=v(d.sub);$('e-fecha').value=v(d.fecha);$('e-insc').value=v(d.inscripciones);$('e-horario').value=v(d.horario);$('e-duracion').value=v(d.duracion);$('e-precio').value=v(d.precio);dirty=false}
 document.addEventListener('input',function(e){if(e.target.closest&&e.target.closest('#edit'))dirty=true});
-db.ref('curso_actual').on('value',function(s){loaded=true;render(Object.assign({},D,s.val()||{}));if(user&&!dirty)fill()},function(){render(Object.assign({},D))});
+db.ref('curso_actual').on('value',function(s){loaded=true;saved=s.val()||{};render(Object.assign({},D,saved));if(user&&!dirty)fill()},function(){render(Object.assign({},D))});
 setTimeout(function(){if(!done)render(Object.assign({},D))},4500);
 (function(){var b=$('sticky'),c=$('cta');if(!('IntersectionObserver' in window)){b.classList.add('show');return}
  new IntersectionObserver(function(e){var s=!e[0].isIntersecting&&e[0].boundingClientRect.top<0;b.classList.toggle('show',s);$('stc').tabIndex=s?0:-1}).observe(c)})();
 function toast(m){var t=$('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2200)}
 function login(){$('aerr').textContent='';auth.signInWithEmailAndPassword($('ae').value.trim(),$('ap').value).catch(function(){$('aerr').textContent='Credenciales incorrectas.'})}
 auth.onAuthStateChanged(function(u){user=u;$('lock').hidden=!!u;$('edit').hidden=!u;if(u&&loaded)fill()});
-function save(){if(!loaded){toast('Aún cargando los datos, espera un momento');return}db.ref('curso_actual').update({cupos:parseInt($('e-cupos').value)||0,total:parseInt($('e-total').value)||20,title:$('e-title').value,sub:$('e-sub').value,fecha:$('e-fecha').value,inscripciones:$('e-insc').value,horario:$('e-horario').value,duracion:$('e-duracion').value,lugar:LUGAR,precio:$('e-precio').value,ts:new Date().toLocaleString('es-CL',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})}).then(function(){dirty=false;toast('✓ Guardado y publicado')}).catch(function(e){toast(e&&e.code==='PERMISSION_DENIED'?'Sin permiso: vuelve a iniciar sesión':'Error al guardar')})}
+function save(){if(!loaded){toast('Aún cargando los datos, espera un momento');return}
+ var cu=$('e-cupos').value.trim(),to=$('e-total').value.trim();
+ if(cu===''||!(parseInt(to,10)>=1)){toast('Completa cupos disponibles y total de cupos');return}
+ db.ref('curso_actual').update({cupos:Math.max(0,parseInt(cu,10)||0),total:parseInt(to,10),title:$('e-title').value.trim(),sub:$('e-sub').value.trim(),fecha:$('e-fecha').value.trim(),inscripciones:$('e-insc').value.trim(),horario:$('e-horario').value.trim(),duracion:$('e-duracion').value.trim(),lugar:LUGAR,precio:$('e-precio').value.trim(),ts:new Date().toLocaleString('es-CL',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})}).then(function(){dirty=false;toast('✓ Guardado y publicado')}).catch(function(e){toast(e&&e.code==='PERMISSION_DENIED'?'Sin permiso: vuelve a iniciar sesión':'Error al guardar')})}
 (function(){var c=false;try{c=sessionStorage.getItem('inasep_v')==='1'}catch(e){}
  function show(n){n=+n||0;if(n>=50){var el=$('visit-num'),t0=null,to=n;function s(ts){if(t0===null)t0=ts;var p=Math.min(1,(ts-t0)/1200);el.textContent=Math.round(to*(1-Math.pow(1-p,3))).toLocaleString('es-CL');if(p<1)requestAnimationFrame(s)}requestAnimationFrame(s);$('viewers').hidden=false}}
  if(c)db.ref('visitas').once('value',function(s){show(s.val())});
